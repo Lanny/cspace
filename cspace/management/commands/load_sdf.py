@@ -33,12 +33,11 @@ class Command(BaseCommand):
         for mol in molecules:
             smiles = MolToSmiles(mol)
             if Chemical.objects.filter(smiles=smiles).count():
-                print(
+                self.stderr.write(self.style.WARNING(
                     (
                         'Chemical with SMILES of "%s" already exist in '
                         'database, doing nothing.'
-                    ) % smiles,
-                    file=sys.stderr
+                    ) % smiles)
                 )
                 skipped += 1
                 continue
@@ -53,7 +52,10 @@ class Command(BaseCommand):
             chem.tags.add(tag)
             loaded += 1
 
-        print('Loaded %d chemicals and skipped %d' % (loaded, skipped))
+        self.stdout.write(self.style.SUCCESS(
+                'Loaded %d chemicals and skipped %d' % (loaded, skipped)
+            )
+        )
 
 
 

@@ -20,7 +20,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         ChemicalTag.objects.get(name=options['tag_name']).delete()
         _, result = Chemical.objects.filter(tags=None).delete()
-        print('%d chemicals deleted.' % result['cspace.Chemical'])
+
+        self.stdout.write(self.style.SUCCESS(
+                '%d chemicals deleted.' % result['cspace.Chemical']
+            )
+        )
 
 
 
