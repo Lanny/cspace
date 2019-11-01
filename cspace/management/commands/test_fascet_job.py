@@ -22,7 +22,5 @@ class Command(BaseCommand):
             embedding='3/RDK/MDS'
         )
 
-        print(job)
-
         cf = ComputeFascet()
         cf.compute(job, reraise=True)

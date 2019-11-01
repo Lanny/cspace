@@ -11,7 +11,6 @@ from cspace.models import *
 class ComputeFascet():
     @transaction.atomic
     def compute(save, job, reraise=False):
-        print('hmm')
         job.status = 1
         job.save()
 
