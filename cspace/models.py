@@ -2,7 +2,19 @@ from django.db import models
 
 from rdkit.Chem.rdmolfiles import MolFromSmiles
 
+SIM_MEASURES = (
+    ('RDK/T', 'RDKit/Tanimoto'),
+)
+
+EMBEDDINGS = (
+    ('3/RDK/MDS', '3/RDKit/Multidimensional Scaling'),
+)
+
 class ChemicalTag(models.Model):
+    name = models.TextField(unique=True)
+    created = models.DateField(auto_now_add=True)
+
+class ChemicalSet(models.Model):
     name = models.TextField(unique=True)
     created = models.DateField(auto_now_add=True)
 
@@ -12,8 +24,46 @@ class Chemical(models.Model):
     pubchem_compound_cid = models.TextField()
     props_json = models.TextField()
     tags = models.ManyToManyField(ChemicalTag)
+    sets = models.ManyToManyField(ChemicalSet)
     created = models.DateField(auto_now_add=True)
 
     def get_mol(self):
         return MolFromSmiles(self.smiles)
 
+class ChemicalSetFascet(models.Model):
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['embedding', 'sim_measure', 'chemical_set'],
+                name='fascet_identity'
+            )
+        ]
+
+    name = models.TextField(unique=True)
+    sim_measure = models.TextField(choices=SIM_MEASURES)
+    embedding = models.TextField(choices=EMBEDDINGS)
+    created = models.DateField(auto_now_add=True)
+    chemical_set = models.ForeignKey(ChemicalSet, on_delete=models.CASCADE)
+    dist_json = models.TextField()
+    chem_ids_json = models.TextField()
+
+class EmbeddedChemical(models.Model):
+    chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE)
+    fascet = models.ForeignKey(ChemicalSetFascet, on_delete=models.CASCADE)
+    position = models.TextField()
+
+class ComputeFascetJob(models.Model):
+    chemical_set = models.ForeignKey(ChemicalSet, on_delete=models.CASCADE)
+    sim_measure = models.TextField(choices=SIM_MEASURES)
+    embedding = models.TextField(choices=EMBEDDINGS)
+    fascet = models.ForeignKey(
+        ChemicalSetFascet,
+        on_delete=models.CASCADE,
+        null=True
+    )
+    status = models.IntegerField(choices=(
+        (-1, 'Failed'),
+        (0, 'Pending'),
+        (1, 'Running'),
+        (2, 'Done'),
+    ), default=0)
