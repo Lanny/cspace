@@ -5,13 +5,13 @@ from django.shortcuts import get_object_or_404, render
 
 from cspace.models import *
 
-def get_fascet_data(request, fid):
-    fascet = get_object_or_404(ChemicalSetFascet, id=fid)
+def get_facet_data(request, fid):
+    facet = get_object_or_404(ChemicalSetFacet, id=fid)
 
     points = []
 
     echems = (EmbeddedChemical.objects
-        .filter(fascet=fascet)
+        .filter(facet=facet)
         .select_related('chemical'))
 
     for echem in echems:
@@ -22,18 +22,18 @@ def get_fascet_data(request, fid):
         })
 
     return JsonResponse({
-        'fascet': {
-            'id': fascet.pk,
-            'name': fascet.name,
-            'simMeasure': fascet.sim_measure,
-            'embedding': fascet.embedding,
+        'facet': {
+            'id': facet.pk,
+            'name': facet.name,
+            'simMeasure': facet.sim_measure,
+            'embedding': facet.embedding,
         },
         'points': points,
     })
 
-def fascet_page(request, fid):
-    fascet = get_object_or_404(ChemicalSetFascet, id=fid)
+def facet_page(request, fid):
+    facet = get_object_or_404(ChemicalSetFacet, id=fid)
 
     return render(request, 'cspace/space-viewer.html', {
-        'fascet_id': fascet.pk
+        'facet_id': facet.pk
     })

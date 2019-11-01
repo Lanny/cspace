@@ -3,11 +3,11 @@ import json
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
-from cspace.jobs.compute_fascet import ComputeFascet
+from cspace.jobs.compute_facet import ComputeFacet
 from cspace.models import *
 
 class Command(BaseCommand):
-    help = 'Test the compute_fascet job'
+    help = 'Test the compute_facet job'
 
     @transaction.atomic
     def handle(self, *args, **options):
@@ -16,11 +16,11 @@ class Command(BaseCommand):
         chems = ChemicalTag.objects.get(name='cns_depressants').chemical_set.all()
         chem_set.chemical_set.add(*chems)
 
-        job = ComputeFascetJob.objects.create(
+        job = ComputeFacetJob.objects.create(
             chemical_set=chem_set,
             sim_measure='RDK/T',
             embedding='3/RDK/MDS'
         )
 
-        cf = ComputeFascet()
+        cf = ComputeFacet()
         cf.compute(job, reraise=True)

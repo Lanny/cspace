@@ -8,7 +8,7 @@ from django.db import transaction
 
 from cspace.models import *
 
-class ComputeFascet():
+class ComputeFacet():
     @transaction.atomic
     def compute(save, job, reraise=False):
         job.status = 1
@@ -62,7 +62,7 @@ class ComputeFascet():
 
         embedding = embedf(dist_mat)
 
-        fascet = ChemicalSetFascet.objects.create(
+        facet = ChemicalSetFacet.objects.create(
             name='%s: %s | %s' % (
                 job.chemical_set.name,
                 job.sim_measure,
@@ -78,9 +78,9 @@ class ComputeFascet():
         for i, chem in enumerate(chems):
             EmbeddedChemical.objects.create(
                 chemical=chem,
-                fascet=fascet,
+                facet=facet,
                 position=json.dumps(embedding[i].tolist())
             )
 
-        job.fascet = fascet
+        job.facet = facet
         job.save()

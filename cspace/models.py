@@ -30,12 +30,12 @@ class Chemical(models.Model):
     def get_mol(self):
         return MolFromSmiles(self.smiles)
 
-class ChemicalSetFascet(models.Model):
+class ChemicalSetFacet(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
                 fields=['embedding', 'sim_measure', 'chemical_set'],
-                name='fascet_identity'
+                name='facet_identity'
             )
         ]
 
@@ -49,15 +49,15 @@ class ChemicalSetFascet(models.Model):
 
 class EmbeddedChemical(models.Model):
     chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE)
-    fascet = models.ForeignKey(ChemicalSetFascet, on_delete=models.CASCADE)
+    facet = models.ForeignKey(ChemicalSetFacet, on_delete=models.CASCADE)
     position = models.TextField()
 
-class ComputeFascetJob(models.Model):
+class ComputeFacetJob(models.Model):
     chemical_set = models.ForeignKey(ChemicalSet, on_delete=models.CASCADE)
     sim_measure = models.TextField(choices=SIM_MEASURES)
     embedding = models.TextField(choices=EMBEDDINGS)
-    fascet = models.ForeignKey(
-        ChemicalSetFascet,
+    facet = models.ForeignKey(
+        ChemicalSetFacet,
         on_delete=models.CASCADE,
         null=True
     )

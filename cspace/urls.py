@@ -24,6 +24,8 @@ urlpatterns = [
     path('',
          TemplateView.as_view(template_name='cspace/index.html'),
          name='index'),
-    path('fascet/data/<int:fid>', views.get_fascet_data, name='fascet-data'),
-    path('fascet/<int:fid>', views.fascet_page, name='fascet-page'),
+    path('facet/data/<int:fid>', views.get_facet_data, name='facet-data'),
+    path('facet/<int:fid>', views.facet_page, name='facet-page'),
 ]
+
+
