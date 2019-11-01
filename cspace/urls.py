@@ -15,7 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import TemplateView
+
+from cspace import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',
+         TemplateView.as_view(template_name='cspace/index.html'),
+         name='index'),
+    path('fascet/data/<int:fid>', views.get_fascet_data, name='fascet-data'),
+    path('fascet/<int:fid>', views.fascet_page, name='fascet-page'),
 ]

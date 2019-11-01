@@ -1,0 +1,11 @@
+{% extends "cspace/base.html" %}
+{% load static %}
+
+{% block title %}Space Viewer{% endblock %}
+
+{% block page_content %}
+  <h2>Viewer</h2>
+  <div id="viewer-holder"></div>
+  <script src="{% static "js/vendor/three.min.js" %}"></script>
+  <script src="{% static "js/space-viewer.js" %}"></script>
+{% endblock %}

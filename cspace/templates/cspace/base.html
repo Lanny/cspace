@@ -1,0 +1,22 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title %}UNNAMED PAGE{% endblock %} - C-Space</title>
+    <meta name="author" content="Ryan 'Lanny' Jenkins">
+    <meta name="description" content="Visualize spaces of embedded chemicals.">
+    <link rel="stylesheet" href="{% static "css/stylesheet.css" %}" type="text/css">
+    {% block head_extra %}{% endblock %}
+  </head>
+  <body>
+    <h1>C-Space</h1>
+    {% block content %}
+      <div class="page-content-container">
+        {% block page_content %}{% endblock %}
+      </div>
+    {% endblock %}
+  </body>
+</html>
+
