@@ -5,6 +5,13 @@ from django.shortcuts import get_object_or_404, render
 
 from cspace.models import *
 
+def facet_index(request):
+    facets = ChemicalSetFacet.objects.all()
+
+    return render(request, 'cspace/facet-index.html', {
+        'facets': facets
+    })
+
 def get_facet_data(request, fid):
     facet = get_object_or_404(ChemicalSetFacet, id=fid)
 

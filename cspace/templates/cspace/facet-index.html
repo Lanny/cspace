@@ -1,0 +1,15 @@
+{% extends "cspace/base.html" %}
+
+{% block title %}Chemical Set Facets{% endblock %}
+
+{% block page_content %}
+  <ol>
+    {% for facet in facets %}
+      <li>
+        <a href="{% url "facet-page" facet.pk %}">
+          {{ facet.name }}
+        </a>
+      </li>
+    {% endfor %}
+  </ol>
+{% endblock %}
