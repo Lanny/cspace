@@ -1,14 +1,21 @@
 ;(() => {
   const pointUUIDMap = {}
-  const scene = new THREE.Scene()
   const W = 800
   const H = 600
 
-  const camera = new THREE.PerspectiveCamera( 75, W/H, 0.1, 1000)
+  const POINT_COLOR = 0xaaaa00
+
+  const scene = new THREE.Scene()
+  scene.fog = new THREE.FogExp2(0x999999, 1.0)
+  scene.background = new THREE.Color(0x999999)
+
+  const camera = new THREE.PerspectiveCamera( 75, W/H, 0.01, 1000)
   camera.position.z = 1
 
   const renderer = new THREE.WebGLRenderer();
   renderer.setSize(W, H)
+  renderer.gammaOutput = true
+  renderer.gammaFactor = 2.2
   document.getElementById('viewer-holder').appendChild(renderer.domElement)
 
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -44,7 +51,7 @@
     const intersects = raycaster.intersectObjects(scene.children);
 
     if (lastIntersect) {
-      lastIntersect.object.material.color.set(0x00ff00)
+      lastIntersect.object.material.color.set(POINT_COLOR)
       lastIntersect = null
     }
 
@@ -56,13 +63,39 @@
     renderer.render(scene, camera)
   }
 
+  scene.add(new THREE.AmbientLight(0xffffff, 0.2))
+
+  {
+    const pLight1 = new THREE.PointLight(0xffffff, 0.75, 100)
+    pLight1.position.set(5, 5, 0)
+
+    const pLight2 = new THREE.PointLight(0xffffff, 0.75, 100)
+    pLight2.position.set(-5, 5, 0)
+
+
+    const pLight3 = new THREE.PointLight(0xffffff, 0.75, 100)
+    pLight3.position.set(0, 5, 0)
+
+    const pLight4 = new THREE.PointLight(0xffffff, 0.5, 100)
+    pLight4.position.set(0, -5, 0)
+
+    scene.add(pLight1)
+    scene.add(pLight2)
+    scene.add(pLight3)
+    scene.add(pLight4)
+  }
+
   fetch(CSpace.facetDataUrl)
     .then(res => res.json())
     .then(res => {
-      const geometry = new THREE.SphereBufferGeometry(0.003, 12, 12)
+      const geometry = new THREE.SphereBufferGeometry(0.005, 12, 12)
 
       res.points.forEach(point => {
-        const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } )
+        const material = new THREE.MeshPhongMaterial({
+          color: POINT_COLOR,
+          specular: 0x111111,
+          shininess: 2
+        })
         const sphere = new THREE.Mesh(geometry, material)
         sphere.position.x = point.pos[0]
         sphere.position.y = point.pos[1]
