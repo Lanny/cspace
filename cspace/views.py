@@ -3,6 +3,8 @@ import json
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 
+from cspace.forms import UploadSDFForm
+from cspace.utils import MethodSplitView
 from cspace.models import *
 
 def facet_index(request):
@@ -44,3 +46,9 @@ def facet_page(request, fid):
     return render(request, 'cspace/space-viewer.html', {
         'facet_id': facet.pk
     })
+
+class UploadSDF(MethodSplitView):
+    def GET(self, request):
+        return render(request, 'cspace/upload-sdf.html', {
+            'form': UploadSDFForm()
+        })

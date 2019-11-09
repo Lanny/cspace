@@ -1,0 +1,13 @@
+{% extends "cspace/base.html" %}
+
+{% block title %}Upload Chemicals: SDF{% endblock %}
+
+{% block page_content %}
+  <h2>Upload Chemicals: SDF</h2>
+
+  <form action="{% url 'upload-sdf' %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Upload" />
+  </form>
+{% endblock %}
