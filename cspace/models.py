@@ -17,6 +17,12 @@ class ChemicalTag(models.Model):
     name = models.TextField(unique=True)
     created = models.DateField(auto_now_add=True)
 
+    def __str__(self):
+        return self.__unicode__()
+
+    def __unicode__(self):
+        return 'tag: %s (%d compounds)' % (self.name, self.chemical_set.count())
+
 class ChemicalSet(models.Model):
     name = models.TextField(unique=True)
     created = models.DateField(auto_now_add=True)
