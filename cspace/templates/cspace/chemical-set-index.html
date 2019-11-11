@@ -6,7 +6,7 @@
   <ol>
     {% for set in sets %}
       <li>
-        <a href="#">
+        <a href="{% url "chemical-set" set.pk %}">
           {{ set.name }} ({{ set.chemical_set.count }} compounds)
         </a>
       </li>

@@ -21,11 +21,17 @@
             </a>
           </td>
         {% endif %}
-        <td>{{ facet.sim_measure }}</td>
-        <td>{{ facet.embedding }}</td>
+        <td>{{ facet.get_sim_measure_display }}</td>
+        <td>{{ facet.get_embedding_display }}</td>
         <td>{{ facet.chemical_set.chemical_set.count }}</td>
         <td>
           <a href="{% url "facet-page" facet.pk %}">View</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="{% if include_chem_set %}5{% else %}4{% endif %}">
+          Empty facet set.
         </td>
       </tr>
     {% endfor %}

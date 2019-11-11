@@ -1,0 +1,9 @@
+{% extends "cspace/base.html" %}
+
+{% block title %}Chemical Set: {{ chem_set.name }}{% endblock %}
+
+{% block page_content %}
+  <h2>Chemical Set: {{ chem_set.name }}</h2>
+
+  {% include "cspace/facet-table.html" with include_chem_set=False facets=chem_set.chemicalsetfacet_set.all %}
+{% endblock %}

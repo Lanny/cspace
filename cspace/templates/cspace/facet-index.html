@@ -5,5 +5,5 @@
 {% block page_content %}
   <h2>All Chemical Set Facets</h2>
 
-  {% include "cspace/facet-table.html" with facets=facets %}
+  {% include "cspace/facet-table.html" with include_chem_set=True facets=facets %}
 {% endblock %}

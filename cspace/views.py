@@ -33,6 +33,13 @@ def facet_index(request):
         'facets': facets
     })
 
+def chemical_set_detail(request, sid):
+    chem_set = get_object_or_404(ChemicalSet, pk=sid)
+
+    return render(request, 'cspace/chemical-set-details.html', {
+        'chem_set': chem_set
+    })
+
 def get_facet_data(request, fid):
     facet = get_object_or_404(ChemicalSetFacet, id=fid)
 
