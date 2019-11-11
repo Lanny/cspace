@@ -1,0 +1,15 @@
+{% extends "cspace/base.html" %}
+
+{% block title %}Chemical Sets{% endblock %}
+
+{% block page_content %}
+  <ol>
+    {% for set in sets %}
+      <li>
+        <a href="#">
+          {{ set.name }} ({{ set.chemical_set.count }} compounds)
+        </a>
+      </li>
+    {% endfor %}
+  </ol>
+{% endblock %}

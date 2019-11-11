@@ -1,0 +1,16 @@
+{% extends "cspace/base.html" %}
+
+{% block title %}Create Chemical Set{% endblock %}
+
+{% block page_content %}
+  <h2>Create Chemical Set</h2>
+
+  <form
+    action="{% url 'create-chemical-set' %}"
+    method="POST"
+  >
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Create" />
+  </form>
+{% endblock %}

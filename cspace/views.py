@@ -8,7 +8,7 @@ from django.urls import reverse
 
 from rdkit.Chem.rdmolfiles import SDMolSupplier
 
-from cspace.forms import UploadSDFForm
+from cspace.forms import UploadSDFForm, CreateChemicalSetForm
 from cspace.utils import MethodSplitView, load_mol
 from cspace.models import *
 
@@ -17,6 +17,13 @@ def tag_index(request):
 
     return render(request, 'cspace/tag-index.html', {
         'tags': tags
+    })
+
+def chemical_set_index(request):
+    sets = ChemicalSet.objects.all()
+
+    return render(request, 'cspace/chemical-set-index.html', {
+        'sets': sets
     })
 
 def facet_index(request):
@@ -58,6 +65,30 @@ def facet_page(request, fid):
     return render(request, 'cspace/space-viewer.html', {
         'facet_id': facet.pk
     })
+
+class CreateChemicalSet(MethodSplitView):
+    def GET(self, request):
+        return render(request, 'cspace/create-chemical-set.html', {
+            'form': CreateChemicalSetForm()
+        })
+
+    @transaction.atomic
+    def POST(self, request):
+        form = CreateChemicalSetForm(request.POST)
+
+        if form.is_valid():
+            tags = form.cleaned_data['tags']
+
+            chem_set = ChemicalSet.objects.create(
+                name=form.cleaned_data['name']
+            )
+            chem_set.save()
+
+            chems = Chemical.objects.filter(tags__in=tags)
+            chem_set.chemical_set.set(chems)
+
+            return HttpResponseRedirect(reverse('chemical-set-index'))
+
 
 class UploadSDF(MethodSplitView):
     def GET(self, request):
