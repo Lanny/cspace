@@ -1,0 +1,15 @@
+{% extends "cspace/base.html" %}
+
+{% block title %}Chemical Tags{% endblock %}
+
+{% block page_content %}
+  <ol>
+    {% for tag in tags %}
+      <li>
+        <a href="#">
+          {{ tag.name }} ({{ tag.chemical_set.count }} compounds)
+        </a>
+      </li>
+    {% endfor %}
+  </ol>
+{% endblock %}

@@ -1,11 +1,9 @@
-import json
-
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
 from rdkit.Chem.rdmolfiles import SDMolSupplier
-from rdkit.Chem.rdmolfiles import MolToSmiles
 
+from cspace.utils import load_mol
 from cspace.models import *
 
 class Command(BaseCommand):
@@ -14,10 +12,6 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('tag_name', type=str)
         parser.add_argument('path', type=str)
-
-    @classmethod
-    def get_mol_props_dict(cls, mol):
-        return dict(((n, mol.GetProp(n)) for n in mol.GetPropNames()))
 
     @transaction.atomic
     def handle(self, *args, **options):
@@ -30,26 +24,20 @@ class Command(BaseCommand):
         molecules = SDMolSupplier(options['path'])
 
         for mol in molecules:
-            smiles = MolToSmiles(mol)
-            if Chemical.objects.filter(smiles=smiles).count():
+            result = utils.load_mol(mol)
+
+            if result == -1:
                 self.stderr.write(self.style.WARNING(
                     (
                         'Chemical with SMILES of "%s" already exist in '
-                        'database, doing nothing.'
+                        'database. Only adding tag.'
                     ) % smiles)
                 )
                 skipped += 1
                 continue
 
-            chem = Chemical(
-                smiles=smiles,
-                chem_name=mol.GetProp('PUBCHEM_IUPAC_NAME'),
-                pubchem_compound_cid=mol.GetProp('PUBCHEM_COMPOUND_CID'),
-                props_json=json.dumps(self.get_mol_props_dict(mol))
-            )
-            chem.save()
-            chem.tags.add(tag)
-            loaded += 1
+            else:
+                loaded += 1
 
         self.stdout.write(self.style.SUCCESS(
                 'Loaded %d chemicals and skipped %d' % (loaded, skipped)

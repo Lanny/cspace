@@ -11,15 +11,18 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **options):
+        """
         ChemicalSet.objects.filter(name='test_set').delete()
         chem_set = ChemicalSet.objects.create(name='test_set')
         chems = ChemicalTag.objects.get(name='cns_depressants').chemical_set.all()
         chem_set.chemical_set.add(*chems)
+        """
+        chem_set = ChemicalSet.objects.get(name='test_set')
 
         job = ComputeFacetJob.objects.create(
             chemical_set=chem_set,
             sim_measure='RDK/T',
-            embedding='3/RDK/MDS'
+            embedding='3/RDK/NM-SMACOF'
         )
 
         cf = ComputeFacet()
