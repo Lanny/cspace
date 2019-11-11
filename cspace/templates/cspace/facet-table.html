@@ -1,0 +1,33 @@
+<table>
+  <thead>
+    <tr>
+      {% if include_chem_set %}
+      <th>Chemical Set</th>
+      {% endif %}
+      <th>Similarity Measure</th>
+      <th>Embedding Method</th>
+      <th>Chemical Count</th>
+      <th>View</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for facet in facets %}
+      <tr>
+        {% if include_chem_set %}
+          <td>
+            <a href="{% url "chemical-set" facet.chemical_set.pk %}">
+              {{ facet.chemical_set.name }}
+            </a>
+          </td>
+        {% endif %}
+        <td>{{ facet.sim_measure }}</td>
+        <td>{{ facet.embedding }}</td>
+        <td>{{ facet.chemical_set.chemical_set.count }}</td>
+        <td>
+          <a href="{% url "facet-page" facet.pk %}">View</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

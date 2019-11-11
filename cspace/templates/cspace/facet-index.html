@@ -3,13 +3,7 @@
 {% block title %}Chemical Set Facets{% endblock %}
 
 {% block page_content %}
-  <ol>
-    {% for facet in facets %}
-      <li>
-        <a href="{% url "facet-page" facet.pk %}">
-          {{ facet.name }}
-        </a>
-      </li>
-    {% endfor %}
-  </ol>
+  <h2>All Chemical Set Facets</h2>
+
+  {% include "cspace/facet-table.html" with facets=facets %}
 {% endblock %}
