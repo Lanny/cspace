@@ -14,3 +14,10 @@ class CreateChemicalSetForm(forms.Form):
         widget=forms.CheckboxSelectMultiple
     )
     
+class CreateFacetJobForm(forms.Form):
+    chemical_set = forms.ModelChoiceField(
+        queryset=ChemicalSet.objects.all(),
+        widget=forms.HiddenInput
+    )
+    sim_measure = forms.ChoiceField(choices=SIM_MEASURES)
+    embedding = forms.ChoiceField(choices=EMBEDDINGS)

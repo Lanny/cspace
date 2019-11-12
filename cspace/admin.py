@@ -16,3 +16,6 @@ class ChemicalTagAdmin(admin.ModelAdmin):
     def members(self, obj):
         return obj.chemical_set.count()
 
+@admin.register(ComputeFacetJob)
+class ComputeFacetJobAdmin(admin.ModelAdmin):
+    list_display = ('chemical_set', 'sim_measure', 'embedding', 'status')

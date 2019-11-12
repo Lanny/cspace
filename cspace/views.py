@@ -8,7 +8,8 @@ from django.urls import reverse
 
 from rdkit.Chem.rdmolfiles import SDMolSupplier
 
-from cspace.forms import UploadSDFForm, CreateChemicalSetForm
+from cspace.forms import UploadSDFForm, CreateChemicalSetForm, \
+        CreateFacetJobForm
 from cspace.utils import MethodSplitView, load_mol
 from cspace.models import *
 
@@ -33,12 +34,35 @@ def facet_index(request):
         'facets': facets
     })
 
-def chemical_set_detail(request, sid):
-    chem_set = get_object_or_404(ChemicalSet, pk=sid)
+class ChemicalSetDetail(MethodSplitView):
+    def GET(self, request, sid):
+        chem_set = get_object_or_404(ChemicalSet, pk=sid)
+        create_facet_form = CreateFacetJobForm(
+            initial={'chemical_set': chem_set}
+        )
 
-    return render(request, 'cspace/chemical-set-details.html', {
-        'chem_set': chem_set
-    })
+        return render(request, 'cspace/chemical-set-details.html', {
+            'chem_set': chem_set,
+            'create_facet_form': create_facet_form,
+        })
+
+    def POST(self, request, sid):
+        chem_set = get_object_or_404(ChemicalSet, pk=sid)
+        create_facet_form = CreateFacetJobForm(request.POST)
+
+        if create_facet_form.is_valid():
+            job = ComputeFacetJob.objects.create(
+                chemical_set=create_facet_form.cleaned_data['chemical_set'],
+                sim_measure=create_facet_form.cleaned_data['sim_measure'],
+                embedding=create_facet_form.cleaned_data['embedding'],
+            )
+
+            return HttpResponseRedirect(reverse('chemical-set', args=(sid,)))
+        else:
+            return render(request, 'cspace/chemical-set-details.html', {
+                'chem_set': chem_set,
+                'create_facet_form': create_facet_form,
+            })
 
 def get_facet_data(request, fid):
     facet = get_object_or_404(ChemicalSetFacet, id=fid)

@@ -6,4 +6,13 @@
   <h2>Chemical Set: {{ chem_set.name }}</h2>
 
   {% include "cspace/facet-table.html" with include_chem_set=False facets=chem_set.chemicalsetfacet_set.all %}
+
+  <form action="{% url 'chemical-set' chem_set.pk %}" method="POST">
+    <h3>Create New Facet</h3>
+    {% csrf_token %}
+    <table>
+      {{ create_facet_form.as_table }}
+    </table>
+    <input type="submit" value="Create" />
+  </form>
 {% endblock %}
