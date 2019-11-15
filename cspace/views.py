@@ -68,16 +68,20 @@ def get_facet_data(request, fid):
     facet = get_object_or_404(ChemicalSetFacet, id=fid)
 
     points = []
+    all_tags = set([])
 
     echems = (EmbeddedChemical.objects
         .filter(facet=facet)
         .select_related('chemical'))
 
     for echem in echems:
+        tags = [tag.name for tag in echem.chemical.tags.all()]
+        all_tags.update(tags)
         points.append({
             'name': echem.chemical.chem_name,
             'chem_id': echem.chemical.pk,
-            'pos': json.loads(echem.position)
+            'pos': json.loads(echem.position),
+            'tags': tags
         })
 
     return JsonResponse({
@@ -86,6 +90,7 @@ def get_facet_data(request, fid):
             'name': facet.name,
             'simMeasure': facet.sim_measure,
             'embedding': facet.embedding,
+            'tags': list(all_tags)
         },
         'points': points,
     })
