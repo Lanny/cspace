@@ -63,7 +63,7 @@ class Command(BaseCommand):
                 ))
                 failed += 1
 
-        style = self.style.get('WARNING' if failed else 'SUCCESS')
+        style = getattr(self.style, 'WARNING' if failed else 'SUCCESS')
         self.stderr.write(style(
             'Completed %d jobs, failed %d.' % (completed, failed)
         ))
