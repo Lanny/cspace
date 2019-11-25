@@ -1,11 +1,15 @@
 import React from 'react'
 
 const ChemList = ({ chemicals }) => {
+  if (!chemicals || chemicals.length === 0) {
+    return <div>Loading...</div>
+  }
+
   return (
     <ol>
       {
-        chiemicals.map(chem => (
-          <li>{chem.name}</li>
+        chemicals.map((chem,idx) => (
+          <li key={idx}>{chem.name}</li>
         ))
       }
     </ol>

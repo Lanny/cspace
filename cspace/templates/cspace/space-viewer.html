@@ -6,11 +6,13 @@
 {% block page_content %}
   <h2>Viewer</h2>
   <div id="viewer-holder"></div>
+  <div id="root"></div>
   <script>
     window.CSpace = {
       facetDataUrl: '{% url "facet-data" facet_id %}'
     }
   </script>
+  <script src="{% static "js/bundle.js" %}"></script>
   <script src="{% static "js/vendor/three.min.js" %}"></script>
   <script src="{% static "js/OrbitControls.js" %}"></script>
   <script src="{% static "js/space-viewer.js" %}"></script>

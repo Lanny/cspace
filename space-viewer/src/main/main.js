@@ -1,12 +1,9 @@
 import React from 'react'
-const ReactDOM = require('react-dom')
+import ReactDOM from 'react-dom'
  
-import ChemList from '../chem-list/ChemList'
+import SpaceViewer from '../space-viewer/SpaceViewer'
 
 const root = document.getElementById('root')
-const chemicals = [
-  { name: 'xanny bars' },
-  { name: 'addy bruh' },
-]
+const viewer = <SpaceViewer facetDataUrl={window.CSpace.facetDataUrl} />
 
-ReactDOM.render(<ChemList chemicals={chemicals} />, root);
+ReactDOM.render(viewer, root)
