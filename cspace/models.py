@@ -37,6 +37,7 @@ class ChemicalSet(models.Model):
 class Chemical(models.Model):
     smiles = models.TextField(unique=True)
     chem_name = models.TextField()
+    mol_weight = models.FloatField()
     pubchem_compound_cid = models.TextField()
     props_json = models.TextField()
     tags = models.ManyToManyField(ChemicalTag)

@@ -1,6 +1,7 @@
 import json
 
 from rdkit.Chem.rdmolfiles import MolToSmiles
+from rdkit.Chem.Descriptors import ExactMolWt
 
 from cspace.models import *
 from cspace.utils.MethodSplitView import MethodSplitView
@@ -16,10 +17,11 @@ def load_mol(mol, tag):
         chem.tags.add(tag)
 
         return -1
-    print(json.dumps(get_mol_props_dict(mol)))
+
     props = get_mol_props_dict(mol)
     chem = Chemical(
         smiles=smiles,
+        mol_weight=ExactMolWt(mol),
         chem_name=props.get('PUBCHEM_IUPAC_NAME', 'MISSING_NAME'),
         pubchem_compound_cid=props.get('PUBCHEM_COMPOUND_CID', 'MISSING_ID'),
         props_json=json.dumps(props)

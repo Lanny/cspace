@@ -80,6 +80,7 @@ def get_facet_data(request, fid):
         points.append({
             'name': echem.chemical.chem_name,
             'chem_id': echem.chemical.pk,
+            'mol_weight': echem.chemical.mol_weight,
             'pos': json.loads(echem.position),
             'tags': tags
         })
