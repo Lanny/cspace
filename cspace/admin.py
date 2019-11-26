@@ -2,6 +2,10 @@ from django.contrib import admin
 
 from .models import *
 
+@admin.register(Chemical)
+class ChemicalAdmin(admin.ModelAdmin):
+    list_display = ('chem_name', 'created')
+
 @admin.register(ChemicalSet)
 class ChemicalSetAdmin(admin.ModelAdmin):
     list_display = ('name', 'created', 'members')
