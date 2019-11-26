@@ -1,7 +1,13 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import ChemList from '../chem-list/ChemList'
 import SpaceScene from '../space-scene/SpaceScene'
+
+const ViewerContainer = styled.div`
+  display: flex;
+  width: 100%;
+`
 
 const SpaceViewer = ({ facetDataUrl }) => {
   const [facet, setFacet] = React.useState()
@@ -17,10 +23,10 @@ const SpaceViewer = ({ facetDataUrl }) => {
   }, [])
 
   return (
-    <div>
+    <ViewerContainer>
       <SpaceScene facet={facet} chemicals={chemicals} />
       <ChemList chemicals={chemicals} />
-    </div>
+    </ViewerContainer>
   )
 }
 
