@@ -47,6 +47,7 @@ const packColor = color => (color[0] << 16) | (color[1] << 8) | color[2]
 
 const initScene = (ref, facet, points) => {
   console.debug('INITING SCENE')
+
   const pointUUIDMap = {}
   const W = 800
   const H = 600
@@ -70,21 +71,23 @@ const initScene = (ref, facet, points) => {
   controls.minDistance = 0.01;
   controls.maxDistance = 2.0;
 
+  const raycaster = new THREE.Raycaster()
   const mouse = new THREE.Vector2()
+  let lastIntersect = null
+  mouse.x = 0
+  mouse.y = 0
 
   renderer.domElement.addEventListener('mousemove', e => {
     mouse.x = ((e.pageX - renderer.domElement.offsetLeft) / W) * 2 - 1
     mouse.y = -(((e.pageY - renderer.domElement.offsetTop) / H) * 2 - 1)
   }, false)
 
-  let lastIntersect = null
-
   function animate() {
     requestAnimationFrame(animate)
     controls.update()
 
-    //raycaster.setFromCamera(mouse, camera)
-    const intersects = []//raycaster.intersectObjects(scene.children)
+    raycaster.setFromCamera(mouse, camera)
+    const intersects = raycaster.intersectObjects(scene.children)
 
     if (lastIntersect) {
       const formerColor = pointUUIDMap[lastIntersect.object.uuid].color
@@ -114,7 +117,7 @@ const initScene = (ref, facet, points) => {
     sphere.position.y = point.pos[1]
     sphere.position.z = point.pos[2]
 
-    //pointUUIDMap[sphere.uuid] = point
+    pointUUIDMap[sphere.uuid] = point
     scene.add(sphere)
   })
 
