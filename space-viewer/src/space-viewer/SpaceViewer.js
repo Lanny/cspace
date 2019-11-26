@@ -1,6 +1,7 @@
 import React from 'react'
 
 import ChemList from '../chem-list/ChemList'
+import SpaceScene from '../space-scene/SpaceScene'
 
 const SpaceViewer = ({ facetDataUrl }) => {
   const [facet, setFacet] = React.useState()
@@ -17,6 +18,7 @@ const SpaceViewer = ({ facetDataUrl }) => {
 
   return (
     <div>
+      <SpaceScene facet={facet} chemicals={chemicals} />
       <ChemList chemicals={chemicals} />
     </div>
   )
