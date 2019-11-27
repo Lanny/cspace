@@ -9,6 +9,11 @@ const Placeholder = styled.div`
   align-items: center;
 `
 
+const Container = styled.div`
+  width: 100%
+  height: 100%;
+`
+
 const ChemicalName = styled.h2`
   border-bottom: 1px solid black;
   margin-bottom: 5px;
@@ -23,6 +28,12 @@ const ChemDetails = ({ chem }) => {
       </Placeholder>
     )
   }
+
+  return (
+    <Container>
+      <ChemicalName>{ chem.name }</ChemicalName>
+    </Container>
+  )
 }
 
 export default ChemDetails

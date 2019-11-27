@@ -23,27 +23,36 @@ const WeigthHeader = styled(TableHeader)`
   width: 3em;
 `
 
-const NameCell = styled.td`
+const Cell = styled.td`
+  background-color: ${({ selected }) => selected ? 'yellow' : 'none'}
+  cursor: pointer;
+`
+
+const NameCell = styled(Cell)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `
 
-const WeightCell = styled.td`
+const WeightCell = styled(Cell)`
   width: 3em;
   text-align: right;
 `
 
-const ChemRow = ({ chemical }) => {
+const ChemRow = ({ chemical, selected, onClick }) => {
   return (
-    <tr>
-      <NameCell>{chemical.name}</NameCell>
-      <WeightCell>{chemical.mol_weight.toFixed(1)}</WeightCell>
+    <tr onClick={onClick}>
+      <NameCell selected={selected}>
+        {chemical.name}
+      </NameCell>
+      <WeightCell selected={selected}>
+        {chemical.mol_weight.toFixed(1)}
+      </WeightCell>
     </tr>
   )
 }
 
-const ChemList = ({ chemicals }) => {
+const ChemList = ({ chemicals, selectedChem, setSelectedChem }) => {
   if (!chemicals || chemicals.length === 0) {
     return <div>Loading...</div>
   }
@@ -63,7 +72,15 @@ const ChemList = ({ chemicals }) => {
         </thead>
         <tbody>
           {
-            chemicals.map(chem => <ChemRow chemical={chem} key={chem.pk} />)
+            chemicals.map((chem, idx) => (
+                <ChemRow
+                  key={chem.chem_id}
+                  chemical={chem}
+                  onClick={() => setSelectedChem(chem)}
+                  selected={selectedChem && selectedChem.chem_id === chem.chem_id}
+                />
+              )
+            )
           }
         </tbody>
       </Table>
