@@ -20,6 +20,28 @@ const ChemicalName = styled.h2`
   padding: 10px 10px 5px 10px;
 `
 
+const FieldsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const Field = styled.div`
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+`
+
+const FieldLabel = styled.span`
+  border-bottom: 1px solid #CAC7C7;
+  padding: 5px;
+  margin-bottom: 5px;
+`
+
+const FieldContent = styled.div`
+  padding-left: 5px;
+`
+
 const ChemDetails = ({ chem }) => {
   if (!chem) {
     return (
@@ -32,6 +54,16 @@ const ChemDetails = ({ chem }) => {
   return (
     <Container>
       <ChemicalName>{ chem.name }</ChemicalName>
+      <FieldsContainer>
+        <Field>
+          <FieldLabel>Molecular Weight</FieldLabel>
+          <FieldContent>{ chem.mol_weight }</FieldContent>
+        </Field>
+        <Field>
+          <FieldLabel>SMILES</FieldLabel>
+          <FieldContent>{ chem.smiles }</FieldContent>
+        </Field>
+      </FieldsContainer>
     </Container>
   )
 }
