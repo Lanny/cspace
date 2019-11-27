@@ -7,6 +7,7 @@ import SpaceScene from '../space-scene/SpaceScene'
 const ViewerContainer = styled.div`
   display: flex;
   width: 100%;
+  height: 600px;
 `
 
 const SpaceViewer = ({ facetDataUrl }) => {
