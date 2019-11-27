@@ -3,9 +3,7 @@
 
 {% block title %}Space Viewer{% endblock %}
 
-{% block page_content %}
-  <h2>Viewer</h2>
-  <div id="viewer-holder"></div>
+{% block content %}
   <div id="root"></div>
   <script>
     window.CSpace = {
@@ -13,9 +11,4 @@
     }
   </script>
   <script src="{% static "js/bundle.js" %}"></script>
-  {% comment %}
-  <script src="{% static "js/vendor/three.min.js" %}"></script>
-  <script src="{% static "js/OrbitControls.js" %}"></script>
-  <script src="{% static "js/space-viewer.js" %}"></script>
-  {% endcomment %}
 {% endblock %}
