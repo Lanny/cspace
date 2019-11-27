@@ -20,6 +20,10 @@ const ChemicalName = styled.h2`
   padding: 10px 10px 5px 10px;
 `
 
+const Details = styled.div`
+  display: flex;
+`
+
 const FieldsContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -43,6 +47,19 @@ const FieldContent = styled.div`
 `
 
 const ChemDetails = ({ chem }) => {
+  const [svgData, setSvgData] = React.useState('')
+
+  React.useEffect(() => {
+    if (!chem)
+      return
+
+    fetch(chem.svg_url)
+      .then(res => res.json())
+      .then(res => {
+        setSvgData(res.data)
+      })
+  }, [chem && chem.chem_id])
+
   if (!chem) {
     return (
       <Placeholder>
@@ -54,16 +71,19 @@ const ChemDetails = ({ chem }) => {
   return (
     <Container>
       <ChemicalName>{ chem.name }</ChemicalName>
-      <FieldsContainer>
-        <Field>
-          <FieldLabel>Molecular Weight</FieldLabel>
-          <FieldContent>{ chem.mol_weight }</FieldContent>
-        </Field>
-        <Field>
-          <FieldLabel>SMILES</FieldLabel>
-          <FieldContent>{ chem.smiles }</FieldContent>
-        </Field>
-      </FieldsContainer>
+      <Details>
+        <div dangerouslySetInnerHTML={({ __html: svgData })} />
+        <FieldsContainer>
+          <Field>
+            <FieldLabel>Molecular Weight</FieldLabel>
+            <FieldContent>{ chem.mol_weight }</FieldContent>
+          </Field>
+          <Field>
+            <FieldLabel>SMILES</FieldLabel>
+            <FieldContent>{ chem.smiles }</FieldContent>
+          </Field>
+        </FieldsContainer>
+      </Details>
     </Container>
   )
 }

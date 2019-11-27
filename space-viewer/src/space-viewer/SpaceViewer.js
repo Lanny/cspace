@@ -17,7 +17,7 @@ const TopPane = styled.div`
 `
 
 const BottomPane = styled.div`
-  height: 200px;
+  height: 300px;
 `
 
 const SpaceViewer = ({ facetDataUrl }) => {

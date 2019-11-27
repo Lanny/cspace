@@ -6,7 +6,9 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
+from rdkit import Chem
 from rdkit.Chem.rdmolfiles import SDMolSupplier
+from rdkit.Chem.Draw import rdMolDraw2D
 
 from cspace.forms import UploadSDFForm, CreateChemicalSetForm, \
         CreateFacetJobForm
@@ -83,7 +85,8 @@ def get_facet_data(request, fid):
             'mol_weight': echem.chemical.mol_weight,
             'smiles': echem.chemical.smiles,
             'pos': json.loads(echem.position),
-            'tags': tags
+            'tags': tags,
+            'svg_url': reverse('draw-chem', args=(echem.chemical.pk,))
         })
 
     return JsonResponse({
@@ -96,6 +99,26 @@ def get_facet_data(request, fid):
         },
         'points': points,
     })
+
+def draw_chemical(request, chem_id):
+    chem = get_object_or_404(Chemical, id=chem_id)
+    mol = chem.get_mol()
+    mc = Chem.Mol(mol.ToBinary())
+
+    try:
+        Chem.Kekulize(mc)
+    except:
+        mc = Chem.Mol(mol.ToBinary())
+
+    if not mc.GetNumConformers():
+        Chem.rdDepictor.Compute2DCoords(mc)
+
+    drawer = rdMolDraw2D.MolDraw2DSVG(300,300)
+    drawer.DrawMolecule(mc)
+    drawer.FinishDrawing()
+    svg = drawer.GetDrawingText().replace('svg:','')
+
+    return JsonResponse({'data' : svg})
 
 def facet_page(request, fid):
     facet = get_object_or_404(ChemicalSetFacet, id=fid)

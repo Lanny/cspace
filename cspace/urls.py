@@ -12,6 +12,7 @@ urlpatterns = [
         name='index'
     ),
     path('tag-index', views.tag_index, name='tag-index'),
+    path('chem/<int:chem_id>/svg', views.draw_chemical, name='draw-chem'),
     path('chem-set/index', views.chemical_set_index, name='chemical-set-index'),
     path('chem-set/create', views.CreateChemicalSet.as_view(), name='create-chemical-set'),
     path('chem-set/<int:sid>', views.ChemicalSetDetail.as_view(), name='chemical-set'),
