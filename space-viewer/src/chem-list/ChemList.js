@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import TagSymbol from '../tag-symbol/TagSymbol'
+
 const TableContainer = styled.div`
   height: 100%;
   overflow-y: scroll;
@@ -23,6 +25,9 @@ const NameHeader = styled(TableHeader)`
 const WeigthHeader = styled(TableHeader)`
   width: 4em;
 `
+const TagHeader = styled(TableHeader)`
+  width: 25px;
+`
 
 const Cell = styled.td`
   background-color: ${({ selected }) => selected ? 'yellow' : 'none'}
@@ -42,7 +47,12 @@ const WeightCell = styled(Cell)`
   text-align: right;
 `
 
-const ChemRow = ({ chemical, selected, onClick }) => {
+const TagCell = styled(Cell)`
+  width: 3em;
+  text-align: right;
+`
+
+const ChemRow = ({ chemical, selected, facet, onClick }) => {
   return (
     <tr onClick={onClick}>
       <NameCell selected={selected}>
@@ -51,12 +61,20 @@ const ChemRow = ({ chemical, selected, onClick }) => {
       <WeightCell selected={selected}>
         {chemical.mol_weight.toFixed(1)}
       </WeightCell>
+      <TagCell selected={selected}>
+        <TagSymbol
+          allTags={facet.tags}
+          tags={chemical.tags}
+          showLabel={false}
+        />
+      </TagCell>
     </tr>
   )
 }
 
 const ChemList = ({
   chemicals,
+  facet,
   selectedChem,
   setPannedChem,
   setSelectedChem
@@ -81,19 +99,22 @@ const ChemList = ({
             <WeigthHeader>
               Wt
             </WeigthHeader>
+            <TagHeader>
+              Tag
+            </TagHeader>
           </tr>
         </thead>
         <tbody>
           {
             chemicals.map((chem, idx) => (
-                <ChemRow
-                  key={chem.chem_id}
-                  chemical={chem}
-                  onClick={onRowClick(chem)}
-                  selected={selectedChem && selectedChem.chem_id === chem.chem_id}
-                />
-              )
-            )
+              <ChemRow
+                key={chem.chem_id}
+                chemical={chem}
+                facet={facet}
+                onClick={onRowClick(chem)}
+                selected={selectedChem && selectedChem.chem_id === chem.chem_id}
+              />
+            ))
           }
         </tbody>
       </Table>

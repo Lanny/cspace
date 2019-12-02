@@ -51,6 +51,7 @@ const SpaceViewer = ({ facetDataUrl }) => {
           pannedChem={pannedChem}
         />
         <ChemList
+          facet={facet}
           chemicals={chemicals}
           selectedChem={selectedChem}
           setSelectedChem={setSelectedChem}
