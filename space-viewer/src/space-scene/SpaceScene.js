@@ -1,8 +1,16 @@
 import React from 'react'
+import styled from 'styled-components'
 import * as THREE from 'three'
 
 import { OrbitControls } from './support/OrbitControls'
 import { getColor, packColor } from './support/utils'
+
+const CanvasContainer = styled.div`
+  width: calc((100vh - 250px) * 1.333);
+  max-width: 80vw;
+`
+
+const ASPECT = 4/3
 
 const addLights = (scene) => {
   let light = new THREE.DirectionalLight(0xefefff, 1.)
@@ -17,24 +25,26 @@ const addLights = (scene) => {
   scene.add(light)
 }
 
+const updateCanvasSize = (ref, renderer) => {
+  const H = ref.clientHeight
+  renderer.setSize(H * ASPECT, H)
+}
+
 const initScene = (ref, facet, points) => {
   console.debug('INITING SCENE')
 
   const pointUUIDMap = {}
   const sphereChemIdMap = {}
-  const W = 800
-  const H = 600
 
   const scene = new THREE.Scene()
   scene.fog = new THREE.FogExp2(0x999999, 0.2)
   scene.background = new THREE.Color(0x999999)
   addLights(scene)
 
-  const camera = new THREE.PerspectiveCamera(75, W/H, 0.01, 1000)
+  const camera = new THREE.PerspectiveCamera(75, 4/3, 0.01, 1000)
   camera.position.z = 1
 
   const renderer = new THREE.WebGLRenderer()
-  renderer.setSize(W, H)
   ref.appendChild(renderer.domElement)
 
   const controls = new OrbitControls(camera, renderer.domElement)
@@ -53,9 +63,14 @@ const initScene = (ref, facet, points) => {
   mouse.y = 0
 
   renderer.domElement.addEventListener('mousemove', e => {
+    const W = renderer.domElement.clientWidth
+    const H = renderer.domElement.clientHeight
     mouse.x = ((e.pageX - renderer.domElement.offsetLeft) / W) * 2 - 1
     mouse.y = -(((e.pageY - renderer.domElement.offsetTop) / H) * 2 - 1)
   }, false)
+
+  window.addEventListener('resize', () => updateCanvasSize(ref, renderer))
+  updateCanvasSize(ref, renderer)
 
   function animate() {
     requestAnimationFrame(animate)
@@ -143,7 +158,7 @@ const SpaceScene = ({
   }, [pannedChem])
 
   return (
-    <div ref={container}></div>
+    <CanvasContainer ref={container}></CanvasContainer>
   )
 }
 

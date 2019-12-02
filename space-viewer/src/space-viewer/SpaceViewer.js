@@ -8,16 +8,18 @@ import SpaceScene from '../space-scene/SpaceScene'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  height: 100vh;
 `
 
 const TopPane = styled.div`
   display: flex;
   width: 100%;
-  height: 600px;
+  height: calc(80vw * 0.75);
+  max-height: calc(100vh - 250px);
 `
 
 const BottomPane = styled.div`
-  height: 300px;
+  flex: 1;
 `
 
 const SpaceViewer = ({ facetDataUrl }) => {

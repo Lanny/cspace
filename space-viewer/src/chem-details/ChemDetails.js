@@ -12,10 +12,12 @@ const Placeholder = styled.div`
 const Container = styled.div`
   width: 100%
   height: 100%;
+  box-sizeing: border-box;
 `
 
 const ChemicalName = styled.h2`
   border-bottom: 1px solid black;
+  margin: 0;
   margin-bottom: 5px;
   padding: 10px 10px 5px 10px;
 `
@@ -81,7 +83,7 @@ const ChemDetails = ({ chem, setPannedChem }) => {
         </PanToButton>
       </ChemicalName>
       <Details>
-        <div dangerouslySetInnerHTML={({ __html: svgData })} />
+        <img src={`data:image/svg+xml;charset=utf-8;base64,${btoa(svgData)}`} />
         <FieldsContainer>
           <Field>
             <FieldLabel>Molecular Weight</FieldLabel>

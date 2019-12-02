@@ -113,7 +113,7 @@ def draw_chemical(request, chem_id):
     if not mc.GetNumConformers():
         Chem.rdDepictor.Compute2DCoords(mc)
 
-    drawer = rdMolDraw2D.MolDraw2DSVG(300,300)
+    drawer = rdMolDraw2D.MolDraw2DSVG(300,200)
     drawer.DrawMolecule(mc)
     drawer.FinishDrawing()
     svg = drawer.GetDrawingText().replace('svg:','')
