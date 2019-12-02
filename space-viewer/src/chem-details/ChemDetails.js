@@ -46,7 +46,11 @@ const FieldContent = styled.div`
   padding-left: 5px;
 `
 
-const ChemDetails = ({ chem }) => {
+const PanToButton = styled.button`
+  margin-left: 10px;
+`
+
+const ChemDetails = ({ chem, setPannedChem }) => {
   const [svgData, setSvgData] = React.useState('')
 
   React.useEffect(() => {
@@ -70,7 +74,12 @@ const ChemDetails = ({ chem }) => {
 
   return (
     <Container>
-      <ChemicalName>{ chem.name }</ChemicalName>
+      <ChemicalName>
+        { chem.name }
+        <PanToButton onClick={() => setPannedChem({ chem_id: chem.chem_id })}>
+          Pan To
+        </PanToButton>
+      </ChemicalName>
       <Details>
         <div dangerouslySetInnerHTML={({ __html: svgData })} />
         <FieldsContainer>

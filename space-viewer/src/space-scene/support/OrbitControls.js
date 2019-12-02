@@ -101,6 +101,17 @@ var OrbitControls = function ( object, domElement ) {
 	//
 	// public methods
 	//
+  this.setPositionFromVec3 = vec => {
+    var sp = new Spherical()
+    sp.setFromVector3(vec)
+
+    sphericalDelta.set(
+      spherical.radius,
+      sp.phi - spherical.phi,
+      sp.theta - spherical.theta)
+  }
+
+  this.rotateLeft = rotateLeft
 
 	this.getPolarAngle = function () {
 

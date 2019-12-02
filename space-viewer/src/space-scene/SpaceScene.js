@@ -2,6 +2,7 @@ import React from 'react'
 import * as THREE from 'three'
 
 import { OrbitControls } from './support/OrbitControls'
+import { getColor, packColor } from './support/utils'
 
 const addLights = (scene) => {
   let light = new THREE.DirectionalLight(0xefefff, 1.)
@@ -16,44 +17,16 @@ const addLights = (scene) => {
   scene.add(light)
 }
 
-const colorMap = [
-  [0,114,189],
-  [217,83,25],
-  [237,177,32],
-  [126,47,142],
-  [119,172,48],
-  [77,190,238],
-  [162,20,47]
-]
-
-const getColor = (allTags, chemTags) => {
-  const color = [0, 0, 0]
-
-  for (let i = 0; i<chemTags.length; i++) {
-    const idx = allTags.indexOf(chemTags[i])
-    color[0] += colorMap[idx][0]
-    color[1] += colorMap[idx][1]
-    color[2] += colorMap[idx][2]
-  }
-
-  color[0] = Math.round(color[0] / chemTags.length)
-  color[1] = Math.round(color[1] / chemTags.length)
-  color[2] = Math.round(color[2] / chemTags.length)
-
-  return color
-}
-
-const packColor = color => (color[0] << 16) | (color[1] << 8) | color[2]
-
 const initScene = (ref, facet, points) => {
   console.debug('INITING SCENE')
 
   const pointUUIDMap = {}
+  const sphereChemIdMap = {}
   const W = 800
   const H = 600
 
   const scene = new THREE.Scene()
-  scene.fog = new THREE.FogExp2(0x999999, 1.0)
+  scene.fog = new THREE.FogExp2(0x999999, 0.2)
   scene.background = new THREE.Color(0x999999)
   addLights(scene)
 
@@ -64,12 +37,14 @@ const initScene = (ref, facet, points) => {
   renderer.setSize(W, H)
   ref.appendChild(renderer.domElement)
 
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.05;
-  controls.screenSpacePanning = false;
-  controls.minDistance = 0.01;
-  controls.maxDistance = 2.0;
+  const controls = new OrbitControls(camera, renderer.domElement)
+  controls.enableDamping = true
+  controls.dampingFactor = 0.05
+  controls.screenSpacePanning = false
+  controls.minDistance = 0.01
+  controls.maxDistance = 2.0
+
+  scene.controls = controls
 
   const raycaster = new THREE.Raycaster()
   const mouse = new THREE.Vector2()
@@ -89,6 +64,7 @@ const initScene = (ref, facet, points) => {
     raycaster.setFromCamera(mouse, camera)
     const intersects = raycaster.intersectObjects(scene.children)
 
+    /*
     if (lastIntersect) {
       const formerColor = pointUUIDMap[lastIntersect.object.uuid].color
       lastIntersect.object.material.color.set(formerColor)
@@ -99,6 +75,7 @@ const initScene = (ref, facet, points) => {
       intersects[0].object.material.color.set(0xff0000)
       lastIntersect = intersects[0]
     }
+    */
 
     renderer.render(scene, camera)
   }
@@ -118,21 +95,52 @@ const initScene = (ref, facet, points) => {
     sphere.position.z = point.pos[2]
 
     pointUUIDMap[sphere.uuid] = point
+    sphereChemIdMap[point.chem_id] = sphere
     scene.add(sphere)
   })
 
   animate()
 
-  return scene
+  return [scene, sphereChemIdMap]
 }
 
-const SpaceScene = ({ facet, chemicals }) => {
+const SpaceScene = ({
+  facet,
+  chemicals,
+  selectedChem,
+  pannedChem
+}) => {
   const container = React.useRef(null)
+  const scene = React.useRef(null)
+  const sphereChemIdMap = React.useRef(null)
+  const selectedSphere = React.useRef(null)
+
   React.useEffect(() => {
     if (container.current && chemicals) {
-      initScene(container.current, facet, chemicals)
+      [scene.current, sphereChemIdMap.current] = initScene(container.current, facet, chemicals)
     }
   }, [facet, chemicals])
+
+  React.useEffect(() => {
+    if (selectedChem) {
+      const oldSphere = selectedSphere.current
+      const newSphere = sphereChemIdMap.current[selectedChem.chem_id]
+
+      if (oldSphere) {
+        oldSphere.material.color.set(selectedChem.color)
+      }
+
+      newSphere.material.color.set(0xff0000)
+      selectedSphere.current = newSphere
+    }
+  }, [selectedChem])
+
+  React.useEffect(() => {
+    if (pannedChem && scene.current) {
+      const sphere = sphereChemIdMap.current[pannedChem.chem_id]
+      scene.current.controls.setPositionFromVec3(sphere.position)
+    }
+  }, [pannedChem])
 
   return (
     <div ref={container}></div>

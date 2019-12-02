@@ -24,6 +24,7 @@ const SpaceViewer = ({ facetDataUrl }) => {
   const [facet, setFacet] = React.useState()
   const [chemicals, setChemicals] = React.useState()
   const [selectedChem, setSelectedChem] = React.useState(null)
+  const [pannedChem, setPannedChem] = React.useState(null)
 
   React.useEffect(() => {
     fetch(CSpace.facetDataUrl)
@@ -37,7 +38,12 @@ const SpaceViewer = ({ facetDataUrl }) => {
   return (
     <Container>
       <TopPane>
-        <SpaceScene facet={facet} chemicals={chemicals} />
+        <SpaceScene
+          facet={facet}
+          chemicals={chemicals}
+          selectedChem={selectedChem}
+          pannedChem={pannedChem}
+        />
         <ChemList
           chemicals={chemicals}
           selectedChem={selectedChem}
@@ -45,7 +51,10 @@ const SpaceViewer = ({ facetDataUrl }) => {
         />
       </TopPane>
       <BottomPane>
-        <ChemDetails chem={selectedChem} />
+        <ChemDetails
+          chem={selectedChem}
+          setPannedChem={setPannedChem}
+        />
       </BottomPane>
     </Container>
   )
