@@ -9,23 +9,26 @@ const TableContainer = styled.div`
 const Table = styled.table`
   width: 100%;
   table-layout: fixed; 
+  border-collapse: collapse;
 `
 
 const TableHeader = styled.th`
   position: sticky;
   top: -1px;
-  background-color: grey;
+  background-color: #999999;
 `
 
 const NameHeader = styled(TableHeader)`
 `
 const WeigthHeader = styled(TableHeader)`
-  width: 3em;
+  width: 4em;
 `
 
 const Cell = styled.td`
   background-color: ${({ selected }) => selected ? 'yellow' : 'none'}
   cursor: pointer;
+  padding: 3px 7px;
+  border-bottom: 1px solid lightgray;
 `
 
 const NameCell = styled(Cell)`

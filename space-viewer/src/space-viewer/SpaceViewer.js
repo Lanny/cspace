@@ -18,6 +18,8 @@ const TopPane = styled.div`
   width: 100%;
   height: calc(80vw * 0.75);
   max-height: calc(100vh - 250px);
+  border-bottom: 1px solid darkgray;
+  box-sizing: border-box;
 `
 
 const BottomPane = styled.div`

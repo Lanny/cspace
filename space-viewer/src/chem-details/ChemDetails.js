@@ -17,8 +17,7 @@ const Container = styled.div`
 
 const ChemicalName = styled.h2`
   border-bottom: 1px solid black;
-  margin: 0;
-  margin-bottom: 5px;
+  margin: 0 10px 5px;
   padding: 10px 10px 5px 10px;
 `
 
