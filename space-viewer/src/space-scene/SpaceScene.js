@@ -14,7 +14,7 @@ const CanvasContainer = styled.div`
 const ASPECT = 4/3
 
 const addLights = (scene) => {
-  let light = new THREE.DirectionalLight(0xefefff, 1.)
+  let light = new THREE.DirectionalLight(0xefefff, .5)
   light.position.set(1, 1, 1).normalize()
   scene.add(light)
 
@@ -103,6 +103,7 @@ const initScene = (ref, facet, points) => {
     const material = new THREE.MeshLambertMaterial({
       color: point.color
     })
+
     const sphere = new THREE.Mesh(geometry, material)
     sphere.position.x = point.pos[0]
     sphere.position.y = point.pos[1]

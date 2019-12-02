@@ -52,9 +52,19 @@ const ChemRow = ({ chemical, selected, onClick }) => {
   )
 }
 
-const ChemList = ({ chemicals, selectedChem, setSelectedChem }) => {
+const ChemList = ({
+  chemicals,
+  selectedChem,
+  setPannedChem,
+  setSelectedChem
+}) => {
   if (!chemicals || chemicals.length === 0) {
     return <div>Loading...</div>
+  }
+
+  const onRowClick = chem => () => {
+    setSelectedChem(chem)
+    setPannedChem(chem)
   }
 
   return (
@@ -76,7 +86,7 @@ const ChemList = ({ chemicals, selectedChem, setSelectedChem }) => {
                 <ChemRow
                   key={chem.chem_id}
                   chemical={chem}
-                  onClick={() => setSelectedChem(chem)}
+                  onClick={onRowClick(chem)}
                   selected={selectedChem && selectedChem.chem_id === chem.chem_id}
                 />
               )
