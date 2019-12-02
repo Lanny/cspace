@@ -27,3 +27,5 @@ export const getColor = (allTags, chemTags) => {
 
 export const packColor = color => (color[0] << 16) | (color[1] << 8) | color[2]
 
+export const cssifyColor = color => `rgb(${color[0]},${color[1]},${color[2]})`
+

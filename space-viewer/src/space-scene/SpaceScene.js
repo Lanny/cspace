@@ -2,14 +2,15 @@ import React from 'react'
 import styled from 'styled-components'
 import * as THREE from 'three'
 
+import Legend from './support/Legend'
 import { OrbitControls } from './support/OrbitControls'
 import { getColor, packColor } from './support/utils'
 
 const CanvasContainer = styled.div`
   width: calc((100vh - 250px) * 1.333);
   max-width: 80vw;
+  position: relative;
 `
-
 const ASPECT = 4/3
 
 const addLights = (scene) => {
@@ -17,8 +18,8 @@ const addLights = (scene) => {
   light.position.set(1, 1, 1).normalize()
   scene.add(light)
 
-  light = new THREE.DirectionalLight(0xffefef, 1.)
-  light.position.set(-1, -1, -1).normalize()
+  light = new THREE.DirectionalLight(0xffefef, 0.25)
+  light.position.set(-1, -1, 2).normalize()
   scene.add(light)
 
   light = new THREE.AmbientLight(0xffffff, 0.9)
@@ -99,10 +100,8 @@ const initScene = (ref, facet, points) => {
 
   points.forEach(point => {
     point.color = packColor(getColor(facet.tags, point.tags)) 
-    const material = new THREE.MeshPhongMaterial({
-      color: point.color,
-      specular: 0x111111,
-      shininess: 0
+    const material = new THREE.MeshLambertMaterial({
+      color: point.color
     })
     const sphere = new THREE.Mesh(geometry, material)
     sphere.position.x = point.pos[0]
@@ -158,7 +157,9 @@ const SpaceScene = ({
   }, [pannedChem])
 
   return (
-    <CanvasContainer ref={container}></CanvasContainer>
+    <CanvasContainer ref={container}>
+      { facet && <Legend tags={facet.tags} /> }
+    </CanvasContainer>
   )
 }
 
