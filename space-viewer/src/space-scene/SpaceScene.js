@@ -79,9 +79,12 @@ const initScene = ({
   renderer.domElement.addEventListener('mousedown', e => {
     mouseDownPos.x = mouse.x
     mouseDownPos.y = mouse.y
+    renderer.domElement.style.cursor = 'grabbing'
   })
 
   renderer.domElement.addEventListener('mouseup', e => {
+    renderer.domElement.style.cursor = ''
+
     if (!lastIntersect)
       return
 
@@ -111,6 +114,15 @@ const initScene = ({
 
     if (intersects.length) {
       lastIntersect = intersects[0]
+    }
+
+    const style = renderer.domElement.style
+    if (style.cursor !== 'grabbing') {
+      if (lastIntersect) {
+        style.cursor = 'pointer'
+      } else {
+        renderer.domElement.style.cursor = 'grab'
+      }
     }
 
     renderer.render(scene, camera)
