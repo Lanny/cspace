@@ -31,7 +31,12 @@ const updateCanvasSize = (ref, renderer) => {
   renderer.setSize(H * ASPECT, H)
 }
 
-const initScene = (ref, facet, points) => {
+const initScene = ({
+  ref,
+  facet,
+  points,
+  setSelectedChem
+}) => {
   console.debug('INITING SCENE')
 
   const pointUUIDMap = {}
@@ -59,6 +64,7 @@ const initScene = (ref, facet, points) => {
 
   const raycaster = new THREE.Raycaster()
   const mouse = new THREE.Vector2()
+  const mouseDownPos = new THREE.Vector2()
   let lastIntersect = null
   mouse.x = 0
   mouse.y = 0
@@ -70,6 +76,25 @@ const initScene = (ref, facet, points) => {
     mouse.y = -(((e.pageY - renderer.domElement.offsetTop) / H) * 2 - 1)
   }, false)
 
+  renderer.domElement.addEventListener('mousedown', e => {
+    mouseDownPos.x = mouse.x
+    mouseDownPos.y = mouse.y
+  })
+
+  renderer.domElement.addEventListener('mouseup', e => {
+    if (!lastIntersect)
+      return
+
+    const dist = Math.sqrt(
+      Math.pow(mouseDownPos.x - mouse.x, 2) + 
+      Math.pow(mouseDownPos.y - mouse.y, 2) 
+    )
+
+    if (dist < 0.01) {
+      setSelectedChem(pointUUIDMap[lastIntersect.object.uuid])
+    }
+  })
+
   window.addEventListener('resize', () => updateCanvasSize(ref, renderer))
   updateCanvasSize(ref, renderer)
 
@@ -80,18 +105,13 @@ const initScene = (ref, facet, points) => {
     raycaster.setFromCamera(mouse, camera)
     const intersects = raycaster.intersectObjects(scene.children)
 
-    /*
     if (lastIntersect) {
-      const formerColor = pointUUIDMap[lastIntersect.object.uuid].color
-      lastIntersect.object.material.color.set(formerColor)
       lastIntersect = null
     }
 
     if (intersects.length) {
-      intersects[0].object.material.color.set(0xff0000)
       lastIntersect = intersects[0]
     }
-    */
 
     renderer.render(scene, camera)
   }
@@ -123,6 +143,7 @@ const SpaceScene = ({
   facet,
   chemicals,
   selectedChem,
+  setSelectedChem,
   pannedChem
 }) => {
   const container = React.useRef(null)
@@ -132,7 +153,12 @@ const SpaceScene = ({
 
   React.useEffect(() => {
     if (container.current && chemicals) {
-      [scene.current, sphereChemIdMap.current] = initScene(container.current, facet, chemicals)
+      [scene.current, sphereChemIdMap.current] = initScene({
+        ref: container.current,
+        points: chemicals,
+        facet,
+        setSelectedChem
+      })
     }
   }, [facet, chemicals])
 
