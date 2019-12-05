@@ -13,8 +13,10 @@ const Placeholder = styled.div`
 
 const Container = styled.div`
   width: 100%
-  height: 100%;
+  height: 250px;
   box-sizeing: border-box;
+  display: flex;
+  flex-direction: column;
 `
 
 const ChemicalName = styled.h2`
@@ -25,11 +27,16 @@ const ChemicalName = styled.h2`
 
 const Details = styled.div`
   display: flex;
+  align-items: center;
+  overflow: hidden;
+  flex-shrink: 1;
 `
 
 const FieldsContainer = styled.div`
   display: flex;
   flex-direction: column;
+  height: 100%;
+  flex-wrap: wrap;
 `
 
 const Field = styled.div`
@@ -37,6 +44,7 @@ const Field = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
+  margin-right: 15px;
 `
 
 const FieldLabel = styled.span`
@@ -116,6 +124,11 @@ const ChemDetails = ({ chem, setPannedChem }) => {
             <FieldLabel>Molecular Weight</FieldLabel>
             <FieldContent>{ chem.mol_weight }</FieldContent>
           </Field>
+          <Field>
+            <FieldLabel>Topological Polar Surface Area</FieldLabel>
+            <FieldContent>{ chem.tpsa.toFixed(1) }Å<sup>2</sup></FieldContent>
+          </Field>
+            
         </FieldsContainer>
       </Details>
     </Container>
