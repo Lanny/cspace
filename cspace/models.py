@@ -4,7 +4,7 @@ from django.db import models
 
 from rdkit.Chem.rdmolfiles import MolFromSmiles
 
-from cspace.utils import memoize
+from cspace.utils.memoize import memoize
 
 SIM_MEASURES = (
     ('RDK/T', 'RDKit/Tanimoto'),
@@ -42,6 +42,7 @@ class Chemical(models.Model):
     smiles = models.TextField(unique=True)
     chem_name = models.TextField()
     mol_weight = models.FloatField()
+    tpsa = models.FloatField()
     pubchem_compound_cid = models.TextField()
     props_json = models.TextField()
     tags = models.ManyToManyField(ChemicalTag)

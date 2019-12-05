@@ -84,6 +84,8 @@ def get_facet_data(request, fid):
             'name': chem.chem_name,
             'chem_id': chem.pk,
             'mol_weight': chem.mol_weight,
+            'tpsa': chem.tpsa,
+            'smiles': chem.smiles,
             'smiles': chem.smiles,
             'pos': json.loads(echem.position),
             'tags': tags,
