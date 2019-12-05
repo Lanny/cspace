@@ -78,15 +78,18 @@ def get_facet_data(request, fid):
 
     for echem in echems:
         tags = [tag.name for tag in echem.chemical.tags.all()]
+        chem = echem.chemical
         all_tags.update(tags)
         points.append({
-            'name': echem.chemical.chem_name,
-            'chem_id': echem.chemical.pk,
-            'mol_weight': echem.chemical.mol_weight,
-            'smiles': echem.chemical.smiles,
+            'name': chem.chem_name,
+            'chem_id': chem.pk,
+            'mol_weight': chem.mol_weight,
+            'smiles': chem.smiles,
             'pos': json.loads(echem.position),
             'tags': tags,
-            'svg_url': reverse('draw-chem', args=(echem.chemical.pk,))
+            'pubchem_cid': chem.props.get('PUBCHEM_COMPOUND_CID', None),
+            'formula': chem.props.get('PUBCHEM_MOLECULAR_FORMULA', None),
+            'svg_url': reverse('draw-chem', args=(chem.pk,))
         })
 
     return JsonResponse({

@@ -1,6 +1,10 @@
+import json
+
 from django.db import models
 
 from rdkit.Chem.rdmolfiles import MolFromSmiles
+
+from cspace.utils import memoize
 
 SIM_MEASURES = (
     ('RDK/T', 'RDKit/Tanimoto'),
@@ -43,6 +47,16 @@ class Chemical(models.Model):
     tags = models.ManyToManyField(ChemicalTag)
     sets = models.ManyToManyField(ChemicalSet)
     created = models.DateField(auto_now_add=True)
+
+    @property
+    @memoize
+    def props(self):
+        return json.loads(self.props_json)
+
+    @property
+    @memoize
+    def mol(self):
+        return MolFromSmiles(self.smiles)
 
     def get_mol(self):
         return MolFromSmiles(self.smiles)

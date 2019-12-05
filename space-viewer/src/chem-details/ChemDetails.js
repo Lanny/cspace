@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import ChemFormula from '../chem-formula/ChemFormula'
+
 const Placeholder = styled.div`
   display: flex;
   width: 100%;
@@ -51,6 +53,10 @@ const PanToButton = styled.button`
   margin-left: 10px;
 `
 
+const pubchemUrl = chem => (
+  `https://pubchem.ncbi.nlm.nih.gov/compound/${chem.pubchem_cid}`
+)
+
 const ChemDetails = ({ chem, setPannedChem }) => {
   const [svgData, setSvgData] = React.useState('')
 
@@ -84,13 +90,31 @@ const ChemDetails = ({ chem, setPannedChem }) => {
       <Details>
         <img src={`data:image/svg+xml;charset=utf-8;base64,${btoa(svgData)}`} />
         <FieldsContainer>
-          <Field>
-            <FieldLabel>Molecular Weight</FieldLabel>
-            <FieldContent>{ chem.mol_weight }</FieldContent>
-          </Field>
+          { chem.formula &&
+            <Field>
+              <FieldLabel>Chemical Formula</FieldLabel>
+              <FieldContent>
+                <ChemFormula formula={chem.formula} />
+              </FieldContent>
+            </Field>
+          }
           <Field>
             <FieldLabel>SMILES</FieldLabel>
             <FieldContent>{ chem.smiles }</FieldContent>
+          </Field>
+          { chem.pubchem_cid &&
+            <Field>
+              <FieldLabel>Pubchem CID</FieldLabel>
+              <FieldContent>
+                <a href={pubchemUrl(chem)}>
+                  { chem.pubchem_cid }
+                </a>
+              </FieldContent>
+            </Field>
+          }
+          <Field>
+            <FieldLabel>Molecular Weight</FieldLabel>
+            <FieldContent>{ chem.mol_weight }</FieldContent>
           </Field>
         </FieldsContainer>
       </Details>
