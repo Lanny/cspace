@@ -1,0 +1,35 @@
+\documentclass[12pt]{article}
+
+\title{CSpace: Interactive Exploration of Chemical Spaces}
+\author{Ryan Jenkins}
+\usepackage[a4paper, left=1.5in, right=1in, top=1in, bottom=1in]{geometry}
+\usepackage{cite}
+\usepackage{graphicx}
+\graphicspath{ {img/} }
+\usepackage[font={small,it}]{caption}
+\usepackage [english]{babel}
+\usepackage [autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+\linespread{1.5}
+\setlength{\parindent}{0in}
+\setlength{\parskip}{16pt plus4pt minus 4pt}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Analysis of similarity of novel chemicals to chemicals with known physiological effects and known mechanisms of action plays an important role in drug discovery, and studying relationships between known chemicals can yield significant insights into the relationship between chemical structure and interaction. CSpace is an interactive tool for visualizing and exploring "chemical spaces", embeddings of sets of chemicals into low dimensional spaces under some similarity metric.
+\end{abstract}
+
+\newpage
+\section{Introduction}
+While it is widely understood that similarity of chemical structure does not equate to similarity of effect or interaction, the notion of chemical similarity has been successfully studied and employed in domains like drug discovery\cite{Nikolova2003}. The notion of chemical similarity or chemical "distance" naturally gives rise to a notion of chemical "space", an abstract space wherein points represent possible chemical structures or some facet of chemical structure.
+
+CSpace is a tool for interactively visualizing chemical spaces in three dimensions with the goal of providing insight into the organization of large groups of chemicals and the relationship between chemical structure and effect.
+
+\newpage
+\bibliography{cites}
+\bibliographystyle{ieeetr}
+
+\end{document}
