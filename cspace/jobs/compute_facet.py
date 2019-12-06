@@ -2,6 +2,7 @@ import json
 
 import numpy as np
 from rdkit import Chem, DataStructs
+from rdkit.Chem.Pharm2D import Gobbi_Pharm2D, Generate
 from sklearn import manifold
 
 from django.db import transaction
@@ -68,14 +69,27 @@ class ComputeFacet():
                 return embedding
 
             return embedf
+        if job.embedding == '3/TSNE':
+            TSNE = manifold.TSNE(
+                n_components=3,
+                metric='precomputed'
+            )
+            return lambda d: TSNE.fit(np.array(d)).embedding_
         else:
             raise Exception('Unknown embedding: %s' % job.embedding)
 
     def _get_distance_func(self, job):
         if job.sim_measure == 'RDK/T':
             make_representation = (
-                lambda chem: Chem.RDKFingerprint(chem.get_mol())
+                lambda chem: Chem.RDKFingerprint(chem.mol)
             )
+            distf = DataStructs.FingerprintSimilarity
+
+            return (make_representation, distf)
+        elif job.sim_measure == 'GOBI/T':
+            make_representation = lambda chem: Generate.Gen2DFingerprint(
+                chem.mol,
+                Gobbi_Pharm2D.factory)
             distf = DataStructs.FingerprintSimilarity
 
             return (make_representation, distf)
@@ -86,15 +100,19 @@ class ComputeFacet():
     def _compute(self, job):
         chem_set = job.chemical_set
         chems = chem_set.chemical_set.all().order_by('-id')
+        n = len(chems)
 
         make_representation, distf = self._get_distance_func(job)
 
-        representations = [make_representation(chem) for chem in chems]
+        representations = []
+        for i, chem in enumerate(chems):
+            print('%d / %d' % (i, n))
+            representations.append(make_representation(chem))
 
-        n = len(chems)
         dist_mat = [[None] * n for _ in range(n)]
 
         for i in range(n):
+            print('%.02f done' % (float(i) / float(n)))
             for j in range(i, n):
                 dist = distf(representations[i], representations[j])
                 dist_mat[i][j] = dist

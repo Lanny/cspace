@@ -8,6 +8,7 @@ from cspace.utils.memoize import memoize
 
 SIM_MEASURES = (
     ('RDK/T', 'RDKit/Tanimoto'),
+    ('GOBI/T', 'Gobi-Poppinger/Tanimoto'),
 )
 
 EMBEDDINGS = (
@@ -15,6 +16,7 @@ EMBEDDINGS = (
     ('3/RDK/NM-MDS', '3/RDKit/Non-Metric Multidimensional Scaling'),
     ('3/RDK/SMACOF', '3/RDKit/SMACOF Multidimensional Scaling'),
     ('3/RDK/NM-SMACOF', '3/RDKit/Non-Metric SMACOF Multidimensional Scaling'),
+    ('3/TSNE', '3/TNSE'),
 )
 
 class ChemicalTag(models.Model):
