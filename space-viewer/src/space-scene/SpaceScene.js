@@ -43,12 +43,16 @@ const initScene = ({
   const sphereChemIdMap = {}
 
   const scene = new THREE.Scene()
-  scene.fog = new THREE.FogExp2(0x999999, 0.2)
+  //scene.fog = new THREE.FogExp2(0x999999, 0.2)
   scene.background = new THREE.Color(0x999999)
   addLights(scene)
 
-  const camera = new THREE.PerspectiveCamera(75, 4/3, 0.01, 1000)
-  camera.position.z = 1
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    4/3,
+    0.01,
+    facet.maxDistFromOrigin * 6)
+  camera.position.z = facet.maxDistFromOrigin  * 2
 
   const renderer = new THREE.WebGLRenderer()
   ref.appendChild(renderer.domElement)
@@ -58,7 +62,7 @@ const initScene = ({
   controls.dampingFactor = 0.05
   controls.screenSpacePanning = false
   controls.minDistance = 0.01
-  controls.maxDistance = 2.0
+  controls.maxDistance = facet.maxDistFromOrigin * 3
 
   scene.controls = controls
 
@@ -128,7 +132,10 @@ const initScene = ({
     renderer.render(scene, camera)
   }
 
-  const geometry = new THREE.SphereBufferGeometry(0.005, 12, 12)
+  const r3ToV = 4/3 * Math.PI
+  const volPerPoint = Math.pow(facet.maxDistFromOrigin, 3) / points.length
+  const r = (Math.pow(volPerPoint, 1/3) / r3ToV) * 0.8
+  const geometry = new THREE.SphereBufferGeometry(r, 12, 12)
 
   points.forEach(point => {
     point.color = packColor(getColor(facet.tags, point.tags)) 

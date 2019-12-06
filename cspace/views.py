@@ -71,6 +71,7 @@ def get_facet_data(request, fid):
 
     points = []
     all_tags = set([])
+    max_dist_from_origin = 0
 
     echems = (EmbeddedChemical.objects
         .filter(facet=facet)
@@ -80,6 +81,11 @@ def get_facet_data(request, fid):
         tags = [tag.name for tag in echem.chemical.tags.all()]
         chem = echem.chemical
         all_tags.update(tags)
+        position = json.loads(echem.position)
+
+        dist_from_origin = sum([c*c for c in position])
+        max_dist_from_origin = max(dist_from_origin, max_dist_from_origin)
+
         points.append({
             'name': chem.chem_name,
             'chem_id': chem.pk,
@@ -87,7 +93,7 @@ def get_facet_data(request, fid):
             'tpsa': chem.tpsa,
             'smiles': chem.smiles,
             'smiles': chem.smiles,
-            'pos': json.loads(echem.position),
+            'pos': position,
             'tags': tags,
             'pubchem_cid': chem.props.get('PUBCHEM_COMPOUND_CID', None),
             'formula': chem.props.get('PUBCHEM_MOLECULAR_FORMULA', None),
@@ -100,6 +106,7 @@ def get_facet_data(request, fid):
             'name': facet.name,
             'simMeasure': facet.sim_measure,
             'embedding': facet.embedding,
+            'maxDistFromOrigin': max_dist_from_origin ** 0.5,
             'tags': sorted(list(all_tags))
         },
         'points': points,
