@@ -100,7 +100,7 @@ def get_facet_data(request, fid):
             'name': facet.name,
             'simMeasure': facet.sim_measure,
             'embedding': facet.embedding,
-            'tags': list(all_tags)
+            'tags': sorted(list(all_tags))
         },
         'points': points,
     })
