@@ -138,15 +138,14 @@ const initScene = ({
   const geometry = new THREE.SphereBufferGeometry(r, 12, 12)
 
   points.forEach(point => {
-    point.color = packColor(getColor(facet.tags, point.tags)) 
-    const material = new THREE.MeshLambertMaterial({
-      color: point.color
-    })
+    const color = packColor(getColor(facet.tags, point.tags))
+    const material = new THREE.MeshLambertMaterial({ color })
 
     const sphere = new THREE.Mesh(geometry, material)
     sphere.position.x = point.pos[0]
     sphere.position.y = point.pos[1]
     sphere.position.z = point.pos[2]
+    sphere._CSpace = { color }
 
     pointUUIDMap[sphere.uuid] = point
     sphereChemIdMap[point.chem_id] = sphere
@@ -187,7 +186,7 @@ const SpaceScene = ({
       const newSphere = sphereChemIdMap.current[selectedChem.chem_id]
 
       if (oldSphere) {
-        oldSphere.material.color.set(selectedChem.color)
+        oldSphere.material.color.set(oldSphere._CSpace.color)
       }
 
       newSphere.material.color.set(0xff0000)
