@@ -24,9 +24,46 @@ Analysis of similarity of novel chemicals to chemicals with known physiological 
 
 \newpage
 \section{Introduction}
-While it is widely understood that similarity of chemical structure does not equate to similarity of effect or interaction, the notion of chemical similarity has been successfully studied and employed in domains like drug discovery\cite{Nikolova2003}. The notion of chemical similarity or chemical "distance" naturally gives rise to a notion of chemical "space", an abstract space wherein points represent possible chemical structures or some facet of chemical structure.
+While it is widely understood that similarity of chemical structure does not always equate to similarity of effect or interaction, the notion of chemical similarity has nevertheless been successfully studied and employed in domains like drug discovery\cite{Nikolova2003}. The notion of chemical similarity or chemical "distance" naturally gives rise to a notion of chemical "space", an abstract space wherein points represent possible chemical structures or some facet of chemical structure.
 
 CSpace is a tool for interactively visualizing chemical spaces in three dimensions with the goal of providing insight into the organization of large groups of chemicals and the relationship between chemical structure and effect.
+
+\section{CSpace Concepts/Structure}
+The most basic record in CSpace is a chemical. Chemical structure is stored internally as a Simplified Molecular Input Line Entry System(SMILES) string\cite{Weininger1988}. Chemicals records also contain various optional metadata including the IUPAC name and PubChem CID. Each chemical may have one or more tags which have no semantic meaning within the system but are used during presentation, e.g. caffeine can be tagged as a purine and as a CNS stimulant.
+
+CSpace currently supports importing chemicals from structure-data files(SDF) which wrap a collection of data in the MDL molfile format. PubChem offers a wealth of chemical information retrievable in the SDF format.
+
+Chemicals are aggregated into "chemical sets", typically by taking the union of chemicals holding any of a some set of tags, e.g. a chemical set of the nitrogenous bases may be formed from the from purine and pyrimidine tags.
+
+A chemical set may have multiple "facets". A facet is an embedding of the chemicals in a set to a 3 dimensional euclidean space. The identify of a facet is formed by its chemical set, a similarity metric for use between chemicals, and an embedding strategy. Chemical set facets are the central object which CSpace visualizes.
+
+\section{Algorithms Used}
+Creating chemical set facets is a central task for CSpace. The supported similarity metrics and embedding algorithms on a chemical set are briefly described below.
+
+\subsection{Similarity Metrics}
+Currently two similarity metrics are supported: RDKit and Gobbi-Poppinger substructure fingerprints.
+
+The RDKit fingerprinting algorithm\cite{landrum_2007} is a modified formulation of the Daylight chemical fingerprinting algorithm\cite{daylighttheorymanual_2019}. Like the Daylight algorithm, it operates by enumerating and counting paths through the atom/bond graph of a molecule, by default considering all paths between 1 and 7 bonds in length. The identity of a bond path (for the purposes of counting) consists of the atomic weight of the atoms participating in each bond and the aromaticity of the bond. These bond path histograms are then hashed to produce a fixed length bit vector that summarizes the structure of the chemical.
+
+The Gobbi-Poppinger fingerprinting algorithm\cite{Gobbi1998} operates on a similar premise to the RDKit algorithm, however rather than enumerating and counting all possible bond paths within some range of sizes, it is instead equipped with a fixed library of substructure patterns which are identified and counted in molecules. This produces a smaller histogram of substructures, however the structures are selected to be chemically meaningful pharmacophores. These histograms are hashed in a similar manner to the RDKit approach and also yield a fixed length bit vector.
+
+After chemicals fingerprints are computed, a distance matrix $D$ is computed:
+
+\begin{equation}
+  D_{i,j} = 1 - T(i,j)
+\end{equation}
+
+Where $T(i,j)$ is the Tanimoto coefficient between molecules $i$ and $j$ in the chemical set.
+
+
+
+\subsection{Embedding Approaches}
+
+\section{Examples}
+
+\section{Future Work}
+
+\section{Conclusion}
 
 \newpage
 \bibliography{cites}
