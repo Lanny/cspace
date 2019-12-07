@@ -83,14 +83,14 @@ class ComputeFacet():
             make_representation = (
                 lambda chem: Chem.RDKFingerprint(chem.mol)
             )
-            distf = DataStructs.FingerprintSimilarity
+            distf = lambda x, y: 1.0 - DataStructs.FingerprintSimilarity(x, y)
 
             return (make_representation, distf)
         elif job.sim_measure == 'GOBI/T':
             make_representation = lambda chem: Generate.Gen2DFingerprint(
                 chem.mol,
                 Gobbi_Pharm2D.factory)
-            distf = DataStructs.FingerprintSimilarity
+            distf = lambda x, y: 1.0 - DataStructs.FingerprintSimilarity(x, y)
 
             return (make_representation, distf)
         else:
