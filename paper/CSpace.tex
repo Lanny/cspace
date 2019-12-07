@@ -55,9 +55,12 @@ After chemicals fingerprints are computed, a distance matrix $D$ is computed:
 
 Where $T(i,j)$ is the Tanimoto coefficient between molecules $i$ and $j$ in the chemical set.
 
-
-
 \subsection{Embedding Approaches}
+CSpace currently supports a total of 5 embedding techniques. They are: metric and non-metric variants of Classical Multi-Dimensional Scaling and SMACOF, as well as t-distributed Stochastic Neighbor Embedding(t-SNE).
+
+The goal of all five methods is to create an n-dimensional (3, in our case) set of points from a dissimilarity matrix where inter-point distances are in some sense preserved. Metric MDS and SMACOF both achieve this by minimizing the difference in inter-point distances (strain) in the embedding with respect to the original distance matrix. The non-metric variants of these two techniques attempt to maintain the relative ordering for pair-wise distance rather than globally minimizing stress (e.g. if $D_{i,j} < D_{i,k}$ than for embedded point $E_i$ it holds that $||E_i - E_j|| < ||E_i - E_k||$ for all $i, j, k$).
+
+t-SNE is a non-linear embedding technique that balances minimization of strain in near-by clusters of points and inter-cluster distances.
 
 \section{Examples}
 
