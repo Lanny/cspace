@@ -16,7 +16,7 @@ EMBEDDINGS = (
     ('3/RDK/NM-MDS', '3/RDKit/Non-Metric Multidimensional Scaling'),
     ('3/RDK/SMACOF', '3/RDKit/SMACOF Multidimensional Scaling'),
     ('3/RDK/NM-SMACOF', '3/RDKit/Non-Metric SMACOF Multidimensional Scaling'),
-    ('3/TSNE', '3/TNSE'),
+    ('3/TSNE', '3/TSNE'),
 )
 
 class ChemicalTag(models.Model):
@@ -32,6 +32,7 @@ class ChemicalTag(models.Model):
 class ChemicalSet(models.Model):
     name = models.TextField(unique=True)
     created = models.DateField(auto_now_add=True)
+    tags = models.ManyToManyField(ChemicalTag)
 
     def __str__(self):
         return self.__unicode__()

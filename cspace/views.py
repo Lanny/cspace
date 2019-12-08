@@ -70,7 +70,7 @@ def get_facet_data(request, fid):
     facet = get_object_or_404(ChemicalSetFacet, id=fid)
 
     points = []
-    all_tags = set([])
+    all_tags = set(facet.chemical_set.tags.all())
     max_dist_from_origin = 0
 
     echems = (EmbeddedChemical.objects
@@ -78,9 +78,8 @@ def get_facet_data(request, fid):
         .select_related('chemical'))
 
     for echem in echems:
-        tags = [tag.name for tag in echem.chemical.tags.all()]
+        tags = all_tags & set(echem.chemical.tags.all())
         chem = echem.chemical
-        all_tags.update(tags)
         position = json.loads(echem.position)
 
         dist_from_origin = sum([c*c for c in position])
@@ -94,7 +93,7 @@ def get_facet_data(request, fid):
             'smiles': chem.smiles,
             'smiles': chem.smiles,
             'pos': position,
-            'tags': tags,
+            'tags': [tag.name for tag in tags],
             'pubchem_cid': chem.props.get('PUBCHEM_COMPOUND_CID', None),
             'formula': chem.props.get('PUBCHEM_MOLECULAR_FORMULA', None),
             'svg_url': reverse('draw-chem', args=(chem.pk,))
@@ -107,7 +106,7 @@ def get_facet_data(request, fid):
             'simMeasure': facet.sim_measure,
             'embedding': facet.embedding,
             'maxDistFromOrigin': max_dist_from_origin ** 0.5,
-            'tags': sorted(list(all_tags))
+            'tags': sorted([tag.name for tag in all_tags])
         },
         'points': points,
     })
@@ -159,6 +158,7 @@ class CreateChemicalSet(MethodSplitView):
 
             chems = Chemical.objects.filter(tags__in=tags)
             chem_set.chemical_set.set(chems)
+            chem_set.tags.set(tags)
 
             return HttpResponseRedirect(reverse('chemical-set-index'))
 
