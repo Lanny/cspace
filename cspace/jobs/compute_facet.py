@@ -69,12 +69,18 @@ class ComputeFacet():
                 return embedding
 
             return embedf
-        if job.embedding == '3/TSNE':
+        elif job.embedding == '3/TSNE':
             TSNE = manifold.TSNE(
                 n_components=3,
                 metric='precomputed'
             )
             return lambda d: TSNE.fit(np.array(d)).embedding_
+        elif job.embedding == '3/ISOMAP':
+            Isomap = manifold.Isomap(
+                n_components=3,
+                metric='precomputed'
+            )
+            return lambda d: Isomap.fit(np.array(d)).embedding_
         else:
             raise Exception('Unknown embedding: %s' % job.embedding)
 

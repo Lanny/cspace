@@ -17,6 +17,7 @@ EMBEDDINGS = (
     ('3/RDK/SMACOF', '3/RDKit/SMACOF Multidimensional Scaling'),
     ('3/RDK/NM-SMACOF', '3/RDKit/Non-Metric SMACOF Multidimensional Scaling'),
     ('3/TSNE', '3/TSNE'),
+    ('3/ISOMAP', '3/ISOMAP'),
 )
 
 class ChemicalTag(models.Model):
