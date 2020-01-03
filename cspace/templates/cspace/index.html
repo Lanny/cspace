@@ -1,9 +1,14 @@
 {% extends "cspace/base.html" %}
 
+{% load static %}
+
 {% block title %}Home{% endblock %}
 
 {% block page_content %}
   <p>
-    C-Space is a tool for creating and visualizing embedded spaces of chemicals.
+    CSpace is a tool for interactively visualizing chemical spaces in three dimensions with the goal of providing insight into the organization of large groups of chemicals and the relationship between chemical structure and effect.
+  </p>
+  <p>
+    You can read more about the design of CSpace and some experiments <a href="{% static 'pdf/CSpace.pdf' %}">here</a>.
   </p>
 {% endblock %}
