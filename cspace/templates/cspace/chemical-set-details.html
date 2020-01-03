@@ -10,9 +10,38 @@
   <form action="{% url 'chemical-set' chem_set.pk %}" method="POST">
     <h3>Create New Facet</h3>
     {% csrf_token %}
-    <table>
+    <table class="form-table">
       {{ create_facet_form.as_table }}
     </table>
     <input type="submit" value="Create" />
   </form>
+
+  <table class="full-table">
+    <thead>
+      <tr>
+        <th class="spanning-row" colspan="3">
+          Incomplete Jobs
+        </th>
+      <tr>
+        <th>Similarity Measure</th>
+        <th>Embedding</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for job in jobs %}
+        <tr>
+          <td>{{ job.get_sim_measure_display }}</td>
+          <td>{{ job.get_embedding_display }}</td>
+          <td>{{ job.get_status_display }}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td class="spanning-row" colspan="3">
+            No Incomplete Jobs
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}

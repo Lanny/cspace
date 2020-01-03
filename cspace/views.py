@@ -46,6 +46,7 @@ class ChemicalSetDetail(MethodSplitView):
         return render(request, 'cspace/chemical-set-details.html', {
             'chem_set': chem_set,
             'create_facet_form': create_facet_form,
+            'jobs': chem_set.computefacetjob_set.filter(status__lt=2)
         })
 
     def POST(self, request, sid):
@@ -64,6 +65,7 @@ class ChemicalSetDetail(MethodSplitView):
             return render(request, 'cspace/chemical-set-details.html', {
                 'chem_set': chem_set,
                 'create_facet_form': create_facet_form,
+                'jobs': chem_set.computefacetjob_set.filter(status__lt=2)
             })
 
 def get_facet_data(request, fid):

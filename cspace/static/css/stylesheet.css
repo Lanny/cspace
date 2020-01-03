@@ -30,3 +30,21 @@ h1,h2,h3 {
 .nav a {
   color: black;
 }
+
+.full-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+.full-table td, .full-table th {
+  border-bottom: 1px solid black;
+}
+
+.spanning-row {
+  text-align: center;
+}
+
+.form-table th {
+  text-align: left;
+}
