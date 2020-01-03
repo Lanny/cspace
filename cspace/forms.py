@@ -21,3 +21,17 @@ class CreateFacetJobForm(forms.Form):
     )
     sim_measure = forms.ChoiceField(choices=SIM_MEASURES)
     embedding = forms.ChoiceField(choices=EMBEDDINGS)
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        facet_query = ComputeFacetJob.objects.filter(
+                chemical_set=cleaned_data['chemical_set'],
+                sim_measure=cleaned_data['sim_measure'],
+                embedding=cleaned_data['embedding']
+            ).exclude(
+                status=-1
+            )
+
+        if facet_query.count():
+            raise forms.ValidationError('Identical job exists')

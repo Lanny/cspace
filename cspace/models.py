@@ -14,8 +14,8 @@ SIM_MEASURES = (
 EMBEDDINGS = (
     ('3/RDK/MDS', '3/RDKit/Multidimensional Scaling'),
     ('3/RDK/NM-MDS', '3/RDKit/Non-Metric Multidimensional Scaling'),
-    ('3/RDK/SMACOF', '3/RDKit/SMACOF Multidimensional Scaling'),
-    ('3/RDK/NM-SMACOF', '3/RDKit/Non-Metric SMACOF Multidimensional Scaling'),
+    ('3/RDK/SMACOF', '3/RDKit/SMACOF MDS'),
+    ('3/RDK/NM-SMACOF', '3/RDKit/Non-Metric SMACOF MDS'),
     ('3/TSNE', '3/TSNE'),
     ('3/ISOMAP', '3/ISOMAP'),
 )

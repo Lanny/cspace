@@ -41,10 +41,26 @@ h1,h2,h3 {
   border-bottom: 1px solid black;
 }
 
+.full-table tr td:first-child {
+  padding-left: 10px;
+}
+
+.full-table tr td:last-child {
+  padding-right: 10px;
+}
+
 .spanning-row {
   text-align: center;
 }
 
 .form-table th {
   text-align: left;
+}
+
+.form-table .errorlist {
+  list-style: none;
+  padding: 5px 10px;
+  color: red;
+  border: 1px dashed red;
+  width: 100%;
 }
