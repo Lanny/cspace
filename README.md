@@ -2,6 +2,10 @@
 
 Visualize spaces of embedded chemicals.
 
+![UI Example](https://github.com/Lanny/cspace/blob/master/paper/img/ui-example.png?raw=true)
+
+See a live version at http://cspace.lannysport.net/
+
 # Installation / Setup
 
 The project is a standard python/django project. You can get _almost_ all the dependencies from:
