@@ -15,7 +15,7 @@ pip install -r requirements.txt
 ```
 
 ## RDKit
-The exception is rdkit, which for "reasons" has to come from your OS's package manager or equivalent. To make sure that rdkit uses the same numpy as cspace, install from requirements.txt before installing rdkit.
+The exception is rdkit, which for "reasons" has to come from your OS's package manager or equivalent. To make sure that rdkit uses the same numpy as cspace, install from requirements.txt before installing rdkit. Depending on how much of a pain in the ass setting up RDKit is, you may consider using anaconda to install it which is somewhat less painful, but you then have to install all the other project requirements through anaconda too and use its whole environment management ecosystem. I am not a fan of anaconda.
 
 ### OSX
 
@@ -35,7 +35,7 @@ brew install rdkit --with-postgresql --with-python3 --without-numpy
 ### Debian based Linux
 
 ```
-sudo apt-get install python-rdkit librdkit1 rdkit-data
+sudo apt-get install python3-rdkit librdkit1
 ```
 
 ### Others
