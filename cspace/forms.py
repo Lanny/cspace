@@ -8,6 +8,7 @@ class UploadSDFForm(forms.Form):
 
 class CreateChemicalSetForm(forms.Form):
     name = forms.CharField(max_length=256)
+    description = forms.CharField(widget=forms.Textarea)
     tags = forms.ModelMultipleChoiceField(
         queryset=ChemicalTag.objects.all(),
         required=True,

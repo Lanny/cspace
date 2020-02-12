@@ -154,7 +154,8 @@ class CreateChemicalSet(MethodSplitView):
             tags = form.cleaned_data['tags']
 
             chem_set = ChemicalSet.objects.create(
-                name=form.cleaned_data['name']
+                name=form.cleaned_data['name'],
+                description=form.cleaned_data['description']
             )
             chem_set.save()
 
