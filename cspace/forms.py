@@ -19,7 +19,9 @@ class CreateFacetJobForm(forms.Form):
         queryset=ChemicalSet.objects.all(),
         widget=forms.HiddenInput
     )
-    sim_measure = forms.ChoiceField(choices=SIM_MEASURES)
+    sim_measure = forms.ChoiceField(
+            choices=SIM_MEASURES,
+            label='Similarity Measure')
     embedding = forms.ChoiceField(choices=EMBEDDINGS)
 
     def clean(self):
