@@ -13,7 +13,6 @@ LOCK_FILE = 'cspace_runner.pid'
 class Command(BaseCommand):
     help = 'Run any pending jobs, ensuring no double runs.'
 
-    @transaction.atomic
     def handle(self, *args, **options):
         try:
             fd = os.open(LOCK_FILE, os.O_WRONLY | os.O_CREAT | os.O_EXCL)

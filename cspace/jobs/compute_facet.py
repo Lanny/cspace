@@ -10,7 +10,6 @@ from django.db import transaction
 from cspace.models import *
 
 class ComputeFacet():
-    @transaction.atomic
     def compute(self, job, reraise=False):
         job.status = 1
         job.save()
@@ -103,6 +102,7 @@ class ComputeFacet():
             raise Exception('Unknown similarity measure: %s' % job.sim_measure)
 
 
+    @transaction.atomic
     def _compute(self, job):
         chem_set = job.chemical_set
         chems = chem_set.chemical_set.all().order_by('-id')
