@@ -32,6 +32,7 @@ class ChemicalTag(models.Model):
 
 class ChemicalSet(models.Model):
     name = models.TextField(unique=True)
+    description = models.TextField(default='')
     created = models.DateField(auto_now_add=True)
     tags = models.ManyToManyField(ChemicalTag)
 

@@ -5,6 +5,10 @@
 {% block page_content %}
   <h2>Chemical Set: {{ chem_set.name }}</h2>
 
+  <p>
+    {{ chem_set.description }}
+  </p>
+
   {% include "cspace/facet-table.html" with include_chem_set=False facets=chem_set.chemicalsetfacet_set.all %}
 
   <form action="{% url 'chemical-set' chem_set.pk %}" method="POST">
