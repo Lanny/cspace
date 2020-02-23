@@ -7,12 +7,9 @@ import { OrbitControls } from './support/OrbitControls'
 import { getColor, packColor } from './support/utils'
 
 const CanvasContainer = styled.div`
-  width: calc((100vh - 250px) * 1.333);
-  max-width: 80vw;
   position: relative;
+  width: calc(100vw - 300px);
 `
-const ASPECT = 4/3
-
 const addLights = (scene) => {
   let light = new THREE.DirectionalLight(0xefefff, .5)
   light.position.set(1, 1, 1).normalize()
@@ -26,9 +23,10 @@ const addLights = (scene) => {
   scene.add(light)
 }
 
-const updateCanvasSize = (ref, renderer) => {
-  const H = ref.clientHeight
-  renderer.setSize(H * ASPECT, H)
+const updateCanvasSize = (ref, renderer, camera) => {
+  renderer.setSize(ref.clientWidth, ref.clientHeight)
+  camera.aspect = ref.clientWidth / ref.clientHeight
+  camera.updateProjectionMatrix()
 }
 
 const initScene = ({
@@ -102,8 +100,10 @@ const initScene = ({
     }
   })
 
-  window.addEventListener('resize', () => updateCanvasSize(ref, renderer))
-  updateCanvasSize(ref, renderer)
+  window.addEventListener(
+    'resize',
+    () => updateCanvasSize(ref, renderer, camera))
+  updateCanvasSize(ref, renderer, camera)
 
   function animate() {
     requestAnimationFrame(animate)

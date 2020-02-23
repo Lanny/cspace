@@ -16,8 +16,7 @@ const Container = styled.div`
 const TopPane = styled.div`
   display: flex;
   width: 100%;
-  height: calc(80vw * 0.75);
-  max-height: calc(100vh - 250px);
+  height: calc(100vh - 250px);
   border-bottom: 1px solid darkgray;
   box-sizing: border-box;
 `
