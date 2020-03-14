@@ -19,9 +19,9 @@ urlpatterns = [
     path('chem-set/index', views.chemical_set_index, name='chemical-set-index'),
     path('chem-set/create', views.CreateChemicalSet.as_view(), name='create-chemical-set'),
     path('chem-set/<int:sid>', views.ChemicalSetDetail.as_view(), name='chemical-set'),
-    path('chem-set/<int:sid>/search', views.sim_search, name='chemical-set-search'),
     path('facet/index', views.facet_index, name='facet-index'),
     path('facet/<int:fid>/data', views.get_facet_data, name='facet-data'),
     path('facet/<int:fid>', views.facet_page, name='facet-page'),
+    path('facet/<int:fid>/search', views.sim_search, name='facet-search'),
     path('upload/sdf', views.UploadSDF.as_view(), name='upload-sdf'),
 ]

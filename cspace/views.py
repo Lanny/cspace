@@ -15,7 +15,7 @@ from rdkit.Chem.rdmolfiles import MolToMolBlock, MolFromSmiles
 from cspace.forms import UploadSDFForm, CreateChemicalSetForm, \
         CreateFacetJobForm
 from cspace.utils import MethodSplitView, load_mol, get_distance_func, \
-        big_qs_iterator
+        big_qs_iterator, DuckChem
 from cspace.models import *
 
 def tag_index(request):
@@ -216,15 +216,19 @@ def edit_stored_chemical(request, chem_id):
         'molblock': MolToMolBlock(mol)
     })
 
-def sim_search(request, sid):
-    chem_set = get_object_or_404(ChemicalSet, pk=sid)
 
-    sim_measure = request.GET.get('simMeasure', 'RDK/T')
-    smiles = request.GET.get('SMILES', '')
-    make_representation, distf = get_distance_func(sim_measure)
+def sim_search(request, fid):
+    facet = get_object_or_404(ChemicalSetFacet, pk=fid)
+    chem_set = facet.chemical_set
 
-    qchem = Chemical(pk=-1, smiles=smiles)
-    qrep = make_representation(qchem)
+    smiles = request.GET.get('SMILES', None)
+    if not smiles:
+        return JsonResponse({
+            'status': 'FAILED'
+        }, code=400)
+
+    make_representation, distf = get_distance_func(facet.sim_measure)
+    qrep = make_representation(DuckChem(smiles))
 
     sim_heap = []
 
@@ -241,7 +245,10 @@ def sim_search(request, sid):
     sim_heap.sort(reverse=True)
 
     return JsonResponse({
-        'results': [(sim, pk) for sim, pk, _ in sim_heap],
+        'qrep': qrep.ToBase64(),
+        'query': smiles,
+        'status': 'OK',
+        'results': dict(((pk, sim) for sim, pk, _ in sim_heap)),
     })
 
 

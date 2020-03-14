@@ -6,7 +6,6 @@ import TagSymbol from '../tag-symbol/TagSymbol'
 const TableContainer = styled.div`
   height: 100%;
   overflow-y: scroll;
-  flex: 1;
 `
 
 const Table = styled.table`
@@ -123,4 +122,4 @@ const ChemList = ({
   )
 }
 
-export default ChemList
+export default React.memo(ChemList)

@@ -1,5 +1,6 @@
 from rdkit import Chem, DataStructs
 from rdkit.Chem.Pharm2D import Gobbi_Pharm2D, Generate
+from rdkit.Chem.rdmolfiles import MolFromSmiles
 
 from .MethodSplitView import MethodSplitView
 from .load_mol import load_mol
@@ -29,6 +30,18 @@ def big_qs_iterator(qs, batch_size=1):
         batch = qs[start:(start+batch_size)]
         for item in batch:
             yield item
+
+class DuckChem(object):
+    def __init__(self, smiles):
+        self._mol = MolFromSmiles(smiles)
+
+    def get_mol(self):
+        return self._mol
+
+    @property
+    def mol(self):
+        return self._mol
+
 
 __all__ = [
     'MethodSplitView',

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import ChemList from '../chem-list/ChemList'
+import Search from '../search/Search'
 import ChemDetails from '../chem-details/ChemDetails'
 import SpaceScene from '../space-scene/SpaceScene'
 
@@ -50,7 +50,7 @@ const SpaceViewer = ({ facetDataUrl }) => {
           setSelectedChem={setSelectedChem}
           pannedChem={pannedChem}
         />
-        <ChemList
+        <Search
           facet={facet}
           chemicals={chemicals}
           selectedChem={selectedChem}
