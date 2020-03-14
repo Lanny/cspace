@@ -9,6 +9,7 @@ from django.urls import reverse
 from rdkit import Chem
 from rdkit.Chem.rdmolfiles import SDMolSupplier
 from rdkit.Chem.Draw import rdMolDraw2D
+from rdkit.Chem.rdmolfiles import MolToMolBlock
 
 from cspace.forms import UploadSDFForm, CreateChemicalSetForm, \
         CreateFacetJobForm
@@ -92,7 +93,6 @@ def get_facet_data(request, fid):
             'chem_id': chem.pk,
             'mol_weight': chem.mol_weight,
             'tpsa': chem.tpsa,
-            'smiles': chem.smiles,
             'smiles': chem.smiles,
             'pos': position,
             'tags': [tag.name for tag in tags],
@@ -205,3 +205,11 @@ class UploadSDF(MethodSplitView):
             return render(request, 'cspace/upload-sdf.html', {
                 'form': form
             })
+
+def edit_stored_chemical(request, chem_id):
+    chem = get_object_or_404(Chemical, pk=chem_id)
+    mol = chem.get_mol()
+
+    return render(request, 'cspace/chemical-editor.html', {
+        'molblock': MolToMolBlock(mol)
+    })

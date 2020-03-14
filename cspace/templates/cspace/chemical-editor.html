@@ -1,0 +1,77 @@
+{% extends "cspace/base.html" %}
+
+{% load static %}
+
+{% block title %}Chem Editor{% endblock %}
+
+{% block css_main %}
+<link
+  rel="stylesheet"
+  href="{% static "css/vendor/kekule.css" %}"
+  type="text/css"
+>
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  #done-button {
+    width: 100%;
+    color: white;
+    background-color: #5a5aff;
+    flex: 1;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  #done-button:hover {
+    background-color: #5050e2;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div
+  id="chemComposer"
+  style="width:800px;height:600px"
+  data-widget="Kekule.Editor.Composer">
+</div>
+
+<button id="done-button">
+  DONE
+</button>
+
+<script
+  type="text/javascript"
+  src="{% static 'js/vendor/kekule.min.js' %}"
+>
+</script>
+<script>
+  var MOLBLOCK = '{{ molblock|escapejs }}' 
+  var chemComposer;
+
+  function init() {
+    var mol = Kekule.IO.loadFormatData(MOLBLOCK, Kekule.IO.DataFormat.MOL);
+    chemComposer = Kekule.Widget.getWidgetById('chemComposer');
+    chemComposer
+      .setAutoResizeConstraints({width: 1, height: 0.9})
+      .setEnableDimensionTransform(true)
+      .setAutoSetMinDimension(true)
+      .setChemObj(mol);
+
+    document.getElementById('done-button')
+      .addEventListener('click', function() {
+        var mol = chemComposer.exportObjs(Kekule.Molecule)[0];
+        var smiles = Kekule.IO.saveFormatData(mol, 'smi');
+        console.log(smiles);
+      })
+  }
+  Kekule.X.domReady(init);
+
+</script>
+{% endblock %}
