@@ -8,6 +8,7 @@ from sklearn import manifold
 from django.db import transaction
 
 from cspace.models import *
+from cspace.utils import get_distance_func
 
 class ComputeFacet():
     def compute(self, job, reraise=False):
@@ -83,32 +84,13 @@ class ComputeFacet():
         else:
             raise Exception('Unknown embedding: %s' % job.embedding)
 
-    def _get_distance_func(self, job):
-        if job.sim_measure == 'RDK/T':
-            make_representation = (
-                lambda chem: Chem.RDKFingerprint(chem.mol)
-            )
-            distf = lambda x, y: 1.0 - DataStructs.FingerprintSimilarity(x, y)
-
-            return (make_representation, distf)
-        elif job.sim_measure == 'GOBI/T':
-            make_representation = lambda chem: Generate.Gen2DFingerprint(
-                chem.mol,
-                Gobbi_Pharm2D.factory)
-            distf = lambda x, y: 1.0 - DataStructs.FingerprintSimilarity(x, y)
-
-            return (make_representation, distf)
-        else:
-            raise Exception('Unknown similarity measure: %s' % job.sim_measure)
-
-
     @transaction.atomic
     def _compute(self, job):
         chem_set = job.chemical_set
         chems = chem_set.chemical_set.all().order_by('-id')
         n = len(chems)
 
-        make_representation, distf = self._get_distance_func(job)
+        make_representation, distf = get_distance_func(job.sim_measure)
 
         representations = []
         for i, chem in enumerate(chems):

@@ -1,5 +1,6 @@
 import json
 import tempfile
+import heapq
 
 from django.db import transaction
 from django.http import JsonResponse, HttpResponseRedirect
@@ -9,11 +10,12 @@ from django.urls import reverse
 from rdkit import Chem
 from rdkit.Chem.rdmolfiles import SDMolSupplier
 from rdkit.Chem.Draw import rdMolDraw2D
-from rdkit.Chem.rdmolfiles import MolToMolBlock
+from rdkit.Chem.rdmolfiles import MolToMolBlock, MolFromSmiles
 
 from cspace.forms import UploadSDFForm, CreateChemicalSetForm, \
         CreateFacetJobForm
-from cspace.utils import MethodSplitView, load_mol
+from cspace.utils import MethodSplitView, load_mol, get_distance_func, \
+        big_qs_iterator
 from cspace.models import *
 
 def tag_index(request):
@@ -213,3 +215,33 @@ def edit_stored_chemical(request, chem_id):
     return render(request, 'cspace/chemical-editor.html', {
         'molblock': MolToMolBlock(mol)
     })
+
+def sim_search(request, sid):
+    chem_set = get_object_or_404(ChemicalSet, pk=sid)
+
+    sim_measure = request.GET.get('simMeasure', 'RDK/T')
+    smiles = request.GET.get('SMILES', '')
+    make_representation, distf = get_distance_func(sim_measure)
+
+    qchem = Chemical(pk=-1, smiles=smiles)
+    qrep = make_representation(qchem)
+
+    sim_heap = []
+
+    i = 0
+    for chem in big_qs_iterator(chem_set.chemical_set.all(), batch_size=200):
+        rep = make_representation(chem)
+        sim = 1.0 - distf(qrep, rep)
+        if i < 10:
+            i += 1
+            heapq.heappush(sim_heap, (sim, chem.pk, chem))
+        else:
+            heapq.heappushpop(sim_heap, (sim, chem.pk, chem))
+
+    sim_heap.sort(reverse=True)
+
+    return JsonResponse({
+        'results': [(sim, pk) for sim, pk, _ in sim_heap],
+    })
+
+
