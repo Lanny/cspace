@@ -43,7 +43,7 @@ const Search = ({
     setFilteredChems((results !== null) ?
       chemicals.filter(({ chem_id }) => chem_id in results) :
       chemicals)
-  }, [chemicals, results]);
+  }, [chemicals, results])
 
   const onQueryChange = e => setQuery(e.target.value)
   const onQuerySubmit = e => {
@@ -58,6 +58,17 @@ const Search = ({
       })
   }
 
+  window.sq = setQuery
+  const onEditQuery = e => {
+    e.preventDefault()
+    const url = `/edit-smiles?SMILES=${encodeURIComponent(query)}`
+    const editorHandle = window.open(url)
+    window.addEventListener('message', message => {
+      setQuery(message.data.SMILES)
+      editorHandle.close()
+    })
+  }
+
   return (
     <Container>
       <QueryContainer action="#" onSubmit={onQuerySubmit}>
@@ -67,7 +78,7 @@ const Search = ({
           value={query}
           onChange={onQueryChange}
         />
-        <IconButton>
+        <IconButton onClick={onEditQuery}>
           <EditIcon size="12px"/>
         </IconButton>
         <IconButton>

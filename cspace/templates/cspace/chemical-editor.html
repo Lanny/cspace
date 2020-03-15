@@ -69,6 +69,10 @@
         var mol = chemComposer.exportObjs(Kekule.Molecule)[0];
         var smiles = Kekule.IO.saveFormatData(mol, 'smi');
         console.log(smiles);
+        window.opener.postMessage({
+          type: 'EDITING_COMPLETE',
+          SMILES: smiles
+        }, '*');
       })
   }
   Kekule.X.domReady(init);

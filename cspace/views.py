@@ -208,14 +208,19 @@ class UploadSDF(MethodSplitView):
                 'form': form
             })
 
-def edit_stored_chemical(request, chem_id):
-    chem = get_object_or_404(Chemical, pk=chem_id)
-    mol = chem.get_mol()
+def edit_smiles(request):
+    smiles = request.GET.get('SMILES', None)
+    if not smiles:
+        return JsonResponse({
+            'status': 'FAILED',
+            'reason': 'Missing `SMILES` param.'
+        }, code=400)
+
+    mol = MolFromSmiles(smiles)
 
     return render(request, 'cspace/chemical-editor.html', {
         'molblock': MolToMolBlock(mol)
     })
-
 
 def sim_search(request, fid):
     facet = get_object_or_404(ChemicalSetFacet, pk=fid)
