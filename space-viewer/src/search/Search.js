@@ -3,6 +3,8 @@ import styled from 'styled-components'
 
 import TagSymbol from '../tag-symbol/TagSymbol'
 import ChemList from '../chem-list/ChemList'
+import SearchIcon from '../icons/SearchIcon'
+import EditIcon from '../icons/EditIcon'
 
 const Container = styled.div`
   height: 100%;
@@ -11,8 +13,19 @@ const Container = styled.div`
   flex-direction: column;
 `
 
-const Query = styled.input`
+const QueryContainer = styled.form`
   width: 100%;
+  display: flex;
+`
+
+const Query = styled.input`
+  flex: 1;
+`
+
+const IconButton = styled.button`
+  -webkit-appearance: none;
+  cursor: pointer;
+  padding: 5px;
 `
 const Search = ({
   chemicals,
@@ -47,14 +60,20 @@ const Search = ({
 
   return (
     <Container>
-      <form action="#" onSubmit={onQuerySubmit}>
+      <QueryContainer action="#" onSubmit={onQuerySubmit}>
         <Query
           type="text"
           placeholder="SMILES query..."
           value={query}
           onChange={onQueryChange}
         />
-      </form>
+        <IconButton>
+          <EditIcon size="12px"/>
+        </IconButton>
+        <IconButton>
+          <SearchIcon size="12px"/>
+        </IconButton>
+      </QueryContainer>
       { loadingState ? 
           <div>Loading...</div> :
           (
