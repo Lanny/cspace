@@ -55,6 +55,7 @@ const FieldLabel = styled.span`
 
 const FieldContent = styled.div`
   padding-left: 5px;
+  word-break: break-all;
 `
 
 const PanToButton = styled.button`
