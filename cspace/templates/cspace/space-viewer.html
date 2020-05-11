@@ -22,7 +22,9 @@
   <div id="root"></div>
   <script>
     window.CSpace = {
-      facetDataUrl: '{% url "facet-data" facet_id %}'
+      facetDataUrl: '{% url "facet-data" facet_id %}',
+      searchUrl: '{% url "facet-search" facet_id %}',
+      chemEditorUrl: '{% url "edit-smiles" %}',
     }
   </script>
   <script src="{% static "js/bundle.js" %}"></script>

@@ -50,7 +50,7 @@ const Search = ({
     e.preventDefault()
     setLoadingState(true)
 
-    fetch(`/facet/${facet.id}/search?SMILES=${encodeURIComponent(query)}`)
+    fetch(`${window.CSpace.searchUrl}?SMILES=${encodeURIComponent(query)}`)
       .then(resp => resp.json())
       .then(({ results }) => {
         setResults(results)
@@ -61,7 +61,7 @@ const Search = ({
   window.sq = setQuery
   const onEditQuery = e => {
     e.preventDefault()
-    const url = `/edit-smiles?SMILES=${encodeURIComponent(query)}`
+    const url = `${window.CSpace.chemEditorUrl}?SMILES=${encodeURIComponent(query)}`
     const editorHandle = window.open(url)
     window.addEventListener('message', message => {
       setQuery(message.data.SMILES)
