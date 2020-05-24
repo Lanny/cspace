@@ -4,6 +4,7 @@ import * as THREE from 'three'
 
 import Legend from './support/Legend'
 import { OrbitControls } from './support/OrbitControls'
+import { TrackballControls } from './support/TrackballControls'
 import { getColor, packColor } from './support/utils'
 
 const CanvasContainer = styled.div`
@@ -55,12 +56,19 @@ const initScene = ({
   const renderer = new THREE.WebGLRenderer()
   ref.appendChild(renderer.domElement)
 
-  const controls = new OrbitControls(camera, renderer.domElement)
+  //const controls = new OrbitControls(camera, renderer.domElement)
+  const controls = new TrackballControls(camera, renderer.domElement)
+	controls.rotateSpeed = 1.5;
+  controls.dynamicDampingFactor = 0.15;
+  controls.noPan = true;
+
+  /*
   controls.enableDamping = true
   controls.dampingFactor = 0.05
   controls.screenSpacePanning = false
   controls.minDistance = 0.01
   controls.maxDistance = facet.maxDistFromOrigin * 3
+  */
 
   scene.controls = controls
 

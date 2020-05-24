@@ -30,6 +30,18 @@ const SpaceViewer = ({ facetDataUrl }) => {
   const [chemicals, setChemicals] = React.useState()
   const [selectedChem, setSelectedChem] = React.useState(null)
   const [pannedChem, setPannedChem] = React.useState(null)
+  const [searchQuery, setSearchQuery] = React.useState('')
+
+  const editSMILES = SMILES =>  {
+    return new Promise(res => {
+      const url = `${window.CSpace.chemEditorUrl}?SMILES=${encodeURIComponent(SMILES)}`
+      const editorHandle = window.open(url)
+      window.addEventListener('message', message => {
+        editorHandle.close()
+        res(message.data.SMILES)
+      })
+    })
+  }
 
   React.useEffect(() => {
     fetch(CSpace.facetDataUrl)
@@ -56,12 +68,17 @@ const SpaceViewer = ({ facetDataUrl }) => {
           selectedChem={selectedChem}
           setSelectedChem={setSelectedChem}
           setPannedChem={setPannedChem}
+          query={searchQuery}
+          setQuery={setSearchQuery}
+          editSMILES={editSMILES}
         />
       </TopPane>
       <BottomPane>
         <ChemDetails
           chem={selectedChem}
           setPannedChem={setPannedChem}
+          setSearchQuery={setSearchQuery}
+          editSMILES={editSMILES}
         />
       </BottomPane>
     </Container>

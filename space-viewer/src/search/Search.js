@@ -32,10 +32,12 @@ const Search = ({
   facet,
   selectedChem,
   setPannedChem,
-  setSelectedChem
+  setSelectedChem,
+  query,
+  setQuery,
+  editSMILES,
 }) => {
   const [results, setResults] = React.useState(null)
-  const [query, setQuery] = React.useState('')
   const [loadingState, setLoadingState] = React.useState(false)
   const [filteredChems, setFilteredChems] = React.useState([])
 
@@ -58,15 +60,9 @@ const Search = ({
       })
   }
 
-  window.sq = setQuery
   const onEditQuery = e => {
     e.preventDefault()
-    const url = `${window.CSpace.chemEditorUrl}?SMILES=${encodeURIComponent(query)}`
-    const editorHandle = window.open(url)
-    window.addEventListener('message', message => {
-      setQuery(message.data.SMILES)
-      editorHandle.close()
-    })
+    editSMILES(query).then(setQuery)
   }
 
   return (

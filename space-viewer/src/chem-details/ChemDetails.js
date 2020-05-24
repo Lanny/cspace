@@ -31,6 +31,12 @@ const Details = styled.div`
   overflow: hidden;
   flex-shrink: 1;
 `
+const StructureContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+`
 
 const FieldsContainer = styled.div`
   display: flex;
@@ -66,7 +72,12 @@ const pubchemUrl = chem => (
   `https://pubchem.ncbi.nlm.nih.gov/compound/${chem.pubchem_cid}`
 )
 
-const ChemDetails = ({ chem, setPannedChem }) => {
+const ChemDetails = ({
+  chem,
+  setPannedChem,
+  setSearchQuery,
+  editSMILES,
+}) => {
   const [svgData, setSvgData] = React.useState('')
 
   React.useEffect(() => {
@@ -97,7 +108,20 @@ const ChemDetails = ({ chem, setPannedChem }) => {
         </PanToButton>
       </ChemicalName>
       <Details>
-        <img src={`data:image/svg+xml;charset=utf-8;base64,${btoa(svgData)}`} />
+        <StructureContainer>
+          <img
+            src={`data:image/svg+xml;charset=utf-8;base64,${btoa(svgData)}`}
+            style={{ width: '250px' }}
+          />
+          <button
+            onClick={e => {
+              e.preventDefault()
+              editSMILES(chem.smiles).then(setSearchQuery)
+            }}
+          >
+            Edit and Search
+          </button>
+        </StructureContainer>
         <FieldsContainer>
           { chem.formula &&
             <Field>
