@@ -209,13 +209,7 @@ class UploadSDF(MethodSplitView):
             })
 
 def edit_smiles(request):
-    smiles = request.GET.get('SMILES', None)
-    if not smiles:
-        return JsonResponse({
-            'status': 'FAILED',
-            'reason': 'Missing `SMILES` param.'
-        }, code=400)
-
+    smiles = request.GET.get('SMILES', '')
     mol = MolFromSmiles(smiles)
 
     return render(request, 'cspace/chemical-editor.html', {
@@ -230,7 +224,7 @@ def sim_search(request, fid):
     if not smiles:
         return JsonResponse({
             'status': 'FAILED'
-        }, code=400)
+        }, status=400)
 
     make_representation, distf = get_distance_func(facet.sim_measure)
     qrep = make_representation(DuckChem(smiles))
