@@ -36,6 +36,12 @@
 
 {% block content %}
 
+<script
+  type="text/javascript"
+  src="{% static 'js/vendor/kekule.min.js' %}"
+>
+</script>
+
 <div
   id="chemComposer"
   style="width:800px;height:600px"
@@ -46,11 +52,6 @@
   DONE
 </button>
 
-<script
-  type="text/javascript"
-  src="{% static 'js/vendor/kekule.min.js' %}"
->
-</script>
 <script>
   var MOLBLOCK = '{{ molblock|escapejs }}' 
   var chemComposer;
@@ -68,7 +69,6 @@
       .addEventListener('click', function() {
         var mol = chemComposer.exportObjs(Kekule.Molecule)[0];
         var smiles = Kekule.IO.saveFormatData(mol, 'smi');
-        console.log(smiles);
         window.opener.postMessage({
           type: 'EDITING_COMPLETE',
           SMILES: smiles
@@ -76,6 +76,13 @@
       })
   }
   Kekule.X.domReady(init);
+
+  // Workaround for Kekule screwing this up somehow
+  document.removeEventListener('DOMContentLoaded', Kekule.X.DomReady.initReady)
+  document.addEventListener('DOMContentLoaded', function(){
+    Kekule.X.DomReady._execFuncs()
+  })
+
 
 </script>
 {% endblock %}
